@@ -1,3 +1,7 @@
+/* Node-Server Startpunkt
+ * (c) 2017
+ * V.1.0.0
+ */
 /* global __dirname */
 'use strict';
 var cfg = require('./config');
