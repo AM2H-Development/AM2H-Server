@@ -8,7 +8,10 @@
     "client",
     "browser"
   ],
+  "description":"AM2H Server on Raspberry",
+  "license": "MIT",
   "author": "mh",
+  "repository": "n/a",
   "contributors": [],
   "dependencies": {
     "express": "4.15.2",
