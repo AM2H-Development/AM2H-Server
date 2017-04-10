@@ -6,9 +6,9 @@
 
 
 config = {
-    "host": "192.168.178.37",
+    "host": "192.168.178.XXX",
     "mysqlUser"     : 'pi',
-    "mysqlPassword" : 'sild76raspberry',
+    "mysqlPassword" : 'XXX',
     "database" : 'mh'
 };
 module.exports = config;
