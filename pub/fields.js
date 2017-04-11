@@ -71,10 +71,10 @@ class Container {
         this.container= new Set();
         this.values= new Values();
     }
-    addDF(args,style,renderer,compute){
+    addDF(defVal,args,style,renderer,compute){
         var df = new DF(args,style,renderer,compute);
         df.id="df"+this.id++;
-        df.value="wait...";
+        df.value=defVal;
         this.container.add(df);
         this.values.addTopic(df.args,df.id);
     }
@@ -87,12 +87,14 @@ class Container {
     
 }
 
-var c = new Container("#contentlayer");
-
-c.addDF("/mh/location","display:inline;" );
-c.addDF("/mh/location","",df );
-c.addDF("/mh/location","",df,cp );
 
 function initAll(){
+    var defVal="wait..";
+    var c = new Container("#contentlayer");
+
+    c.addDF(defVal,"/mh/location","display:inline;" );
+    c.addDF(defVal,"/mh/location","",df );
+    c.addDF(defVal,"/mh/location","",df,cp );
+
     c.update();
 }
