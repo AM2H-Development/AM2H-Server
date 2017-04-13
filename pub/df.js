@@ -4,6 +4,8 @@
  * and open the template in the editor.
  * 
  */
+/* global _v, c */
+
 var bgImage = {
     "background-image": "url(\"http://qxf.de/HeizungV2_image.svg\")",
     "width": "1030px",
@@ -11,70 +13,26 @@ var bgImage = {
     "background-size": "1030px 620px"
 };
 
-var df = {
-    "mqtt-devices-esp1-state":{
-        "type":"text",
-        "style":"width: 56px; left:  10px; top: 10px;",
-        "unit":"",
-        "fraction":"1",
-        "prescale":"10",
-        "clickable":true,
-        "images":{"on":"/bild1.svg","off":"bild-off.svg","auto":"auto.jpg"}
-    },
-    "mh-location-raum1-state-temperature":{
-        "type":"df",
-        "style":"width: 56px; left:  200px; top: 100px;",
-        "unit":" %",
-        "fraction":"1",
-        "prescale":"10",
-        "clickable":false,
-        "compute":function (val){
-            val *=1;
-            return val;
-        }
-        
-    },
-    "mh-location-raum1-state-humidity":{
-        "type":"df",
-        "style":"width: 56px; left:  50px; top: 300px;",
-        "unit":" &ordm;C",
-        "fraction":"1",
-        "prescale":"10",
-        "clickable":true
-    }
-};
+function initFields(){
+    var re = function(id,val,style){return "<div id=\""+id+"\" style=\""+style+"\">Wert: "+val+"</div>";};
+    var cp = function(a){return _v.get(a[0])*1+_v.get(a[1])*1;};
+    var fo = function(val,prescale,fraction,unit){
+        val =  (val+" ").replace(",", ".");
+        val /= prescale;
+        return val.toLocaleString('de-DE', {minimumFractionDigits: fraction, maximumFractionDigits: fraction}) + unit;
+    };
+    var fo2= function(val){
+        return "fo2 "+val;
+    };
 
-var cf = {
-    "aaa":{
-        "type":"df",
-        "style":"width: 56px; left:  200px; top: 500px;",
-        "unit":" %",
-        "fraction":"1",
-        "prescale":"10",
-        "clickable":false,
-        "compute":function (){
-            var hum = $('#mh-location-raum1-state-humidity').data('value');
-            var val = $('#mh-location-raum1-state-temperature').data('value');
-            hum *=1;
-            val *=1;
-            console.log("compute " + val + hum);
-            return val+hum;
-        }
-    },
-    "bbb":{
-        "type":"df",
-        "style":"width: 56px; left:  100px; top: 500px;",
-        "unit":" %",
-        "fraction":"3",
-        "prescale":"1",
-        "clickable":false,
-        "compute":function (){
-            var hum = $('#mh-location-raum1-state-humidity').data('value');
-            var val = $('#mh-location-raum1-state-temperature').data('value');
-            hum *=1;
-            val *=1;
-            console.log("compute " + val + hum);
-            return val/hum;
-        }
-    }    
-};
+        
+    c.setContext("#contentlayer");
+    c.setDefaultValue("wait..");
+    c.addDF(["mh/location/raum1/state/temperature"],"display:inline;" );
+    c.addDF(["mh/location/raum1/state/humidity"],"display:block",re );
+    c.addDF(["mh/location/raum1/state/humidity"],"display:block",re,null,fo2 );
+    c.addDF(["mh/location/raum1/state/temperature","mh/location/raum1/state/humidity"],"display:block",re,cp );
+    c.addDF(["mh/location/raum1/state/temperature","mh/location/raum1/state/humidity"],"display:block",re,cp,fo,10,2," °C" );
+    c.init();
+ 
+}    
