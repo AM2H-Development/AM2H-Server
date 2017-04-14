@@ -13,6 +13,21 @@ $(document).ready(function () {
 const _l = new Map();
 const _v = new Map();
 
+class V{
+    asI(v){
+        return parseInt(_v.get(v),10);
+    }
+    asF(v,defV=0){
+        var val = _v.get(v);
+        if (val===null) val=defV;
+        return parseFloat(val.toString().replace(",", "."),10);
+    }
+    asS(v){
+        return _v.get(v).toString();
+    }
+}
+const v = new V();
+
 class DF {
     constructor(args,style,renderer,compute,formatter,prescale=1,fraction=0,unit=""){
         this.id=null;
@@ -31,7 +46,7 @@ class DF {
         if (compute instanceof Function){
             this.compute=compute;
         } else {
-            this.compute=function(args){return _v.get(args[0]);};
+            this.compute=function(args){return v.asF(args[0]);};
         }
         if (formatter instanceof Function){
             this.formatter=formatter;
@@ -105,6 +120,7 @@ class Container {
             socket.on(topic,this.updateValue);
             socket.emit('poll',topic);
         }
+        c.render();
     }
     updateValue(topicvalue){
         var split = topicvalue.split('#', 2);
