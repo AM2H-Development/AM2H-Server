@@ -62,16 +62,14 @@ class DF {
         }
     }
     update(context){
-        console.log(this.id + " "+ this.status + " " + this.value);
         switch (this.status){
             case 0:
                 $(context).append(this.renderer(this.id,this.value,this.style));
                 this.status=1;
                 break;
             case 2:
-                console.log($("#"+this.id).html());
+                // console.log(this.id + " "+ this.status + " " + this.value);
                 // throw new Error("stop!");
-
                 $("#"+this.id).replaceWith(this.renderer(this.id,this.formatter(this.value,this.prescale,this.fraction,this.unit),this.style));
                 this.status=1;
                 break;

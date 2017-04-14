@@ -20,17 +20,6 @@ var fo2= function(val){
     return "fo2 "+val;
 };
 
-var testDF ={
-    topics: ["mh/location/raum1/state/temperature","mh/location/raum1/state/humidity"],
-    style: "display:block",
-    unit: " °C",
-    renderer: re,
-    compute: cp,
-    formatter: fo,
-    prescale: 1000,
-    fraction: 2
-};
-
 function initFields(){
     c.setContext("#contentlayer");
     c.setBgImage(bgImage);
@@ -40,6 +29,13 @@ function initFields(){
     c.addDF(["mh/location/raum1/state/humidity"],"display:block","",re,null,fo2 );
     c.addDF(["mh/location/raum1/state/temperature","mh/location/raum1/state/humidity"],"display:block","",re,cp );
     c.addDF(["mh/location/raum1/state/temperature","mh/location/raum1/state/humidity"],"display:block"," °C",re,cp,fo,10,2 );
-    c.addDF(testDF);
-   
-}    
+    c.addDF({   topics: ["mh/location/raum1/state/temperature","mh/location/raum1/state/humidity"],
+                style: "display:block",
+                unit: " °C",
+                renderer: re,
+                compute: cp,
+                formatter: fo,
+                prescale: 1000,
+                fraction: 2
+            });
+}
