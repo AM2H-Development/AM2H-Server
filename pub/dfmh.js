@@ -1,7 +1,7 @@
 /* 
  * AM2H V.2.0.0 (c)2017 
  */
-/* global c, v */
+/* global c, v, socket */
 
 var bgImage = {
     "background-image": "url(\"http://qxf.de/HeizungV2_image.svg\")",
@@ -18,6 +18,16 @@ var fo = function(val,prescale,fraction,unit){
 };
 var fo2= function(val){
     return "fo2 "+val;
+};
+
+function send(val) {
+    socket.emit('set', 'mh/location/raum1/state/temperature#'+val.replace(",", ".")*10);
+}
+
+var re_input = function(id,val,style){
+    var input = "<input type=\"text\" id=\""+id+"in\" style=\"width: 61px;\" name=\""+id+"\" value=\""+val+"\" \>";
+    var button= "<button type=\"button\" onclick=\"send($('#"+ id +"in').val());\">set</button>";
+    return "<div style=\""+style+"\" id=\""+id+"\">" + input + button + "</div>";
 };
 
 function initFields(){
@@ -38,4 +48,9 @@ function initFields(){
                 prescale: 1000,
                 fraction: 2
             });
+    c.addDF({   topics: ["mh/location/raum1/state/temperature"],
+                style: "width: 120px; left:  10px; top: 320px;",
+                renderer: re_input
+            });
+
 }

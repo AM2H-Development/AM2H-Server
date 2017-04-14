@@ -8,7 +8,6 @@ var cfg = require('./config');
 console.log(cfg.host);
 
 var menu = require('./menu');
-console.log(menu.default.name);
 
 var _ = require('underscore');
 const express = require('express');
@@ -50,7 +49,6 @@ mysqlClient.query("CREATE TABLE IF NOT EXISTS " + cfg.database + "." + cfg.datab
                     + ");", function (error) {
     if (error) throw error;
 }); 
-
 
 // MQTT Client
 var mqtt = require('mqtt');
@@ -103,6 +101,3 @@ mqttClient.on('message', function (topic, message) {
     });
     io.emit(topic,topic + "#" + message.toString());
 });
-
-
-// setInterval(() => io.emit('time', new Date().toTimeString()), 10000);
