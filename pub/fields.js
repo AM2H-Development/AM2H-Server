@@ -1,6 +1,6 @@
 /* 
 Felddefinition
-V1.0.0 vom 10.04.2017
+V2.0.0 vom 14.04.2017
 */
 /* global Function, ds */
 
@@ -26,14 +26,13 @@ class DF {
         if (renderer instanceof Function){
             this.renderer=renderer;
         } else {
-            this.renderer=function(id,val,style){return "<div id=\""+id+"\" style=\""+style+"\">"+val+"</div>";};
+            this.renderer=function(id,val,style){return "<div class=\"df\" id=\""+id+"\" style=\""+style+"\">"+val+"</div>";};
         }
         if (compute instanceof Function){
             this.compute=compute;
         } else {
             this.compute=function(args){return _v.get(args[0]);};
         }
-        console.log("formatter: " + formatter);
         if (formatter instanceof Function){
             this.formatter=formatter;
         } else {
@@ -47,7 +46,6 @@ class DF {
             };
         }
     }
-    
     update(context){
         switch (this.status){
             case 0:
@@ -59,7 +57,6 @@ class DF {
                 this.status=1;
                 break;
         }
-        // this.value = this.compute(arguments);
     }    
 }
 
@@ -78,6 +75,7 @@ class Container {
         this.id=0;
         this.defVal="wait...";
         this.context = null;
+        this.bgImage="";
         this.container= new Set();
     }
     setContext(context){
@@ -85,6 +83,9 @@ class Container {
     }
     setDefaultValue(defVal){
         this.defVal=defVal;
+    }
+    setBgImage(bgImage){
+        this.bgImage=bgImage;
     }
     addDF(args,style,renderer,compute,formatter,prescale,fraction,unit){
         var df = new DF(args,style,renderer,compute,formatter,prescale,fraction,unit);
@@ -102,7 +103,6 @@ class Container {
         } else {
             _l.set(topic, new Listener(df));
             socket.on(topic,this.updateValue);
-            console.log("poll "+topic);
             socket.emit('poll',topic);
         }
     }
@@ -119,9 +119,11 @@ class Container {
             df.value = df.compute(df.args);
             df.status=2;
         }
-        c.init();
+        c.render();
     }
-    init(){
+    render(){
+        $(this.context).css(this.bgImage);
+
         for (let df of this.container) {
             console.log(df.id);
             df.update(this.context);
@@ -129,5 +131,3 @@ class Container {
     }
 }
 const c = new Container();
-
-
