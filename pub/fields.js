@@ -107,7 +107,7 @@ class Container {
     setBgImage(bgImage){
         this.bgImage=bgImage;
     }
-    addDF(args,style,renderer,compute,formatter,prescale,fraction,unit){
+    addDF(args,style,unit,renderer,compute,formatter,prescale,fraction){
         var df = new DF(args,style,renderer,compute,formatter,prescale,fraction,unit);
         df.id="df"+this.id++;
         df.value=this.defVal;
