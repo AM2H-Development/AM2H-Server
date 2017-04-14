@@ -1,6 +1,6 @@
 /* 
 Felddefinition
-V2.0.0 vom 14.04.2017
+V2.0.3 vom 14.04.2017
 */
 /* global Function, ds */
 
