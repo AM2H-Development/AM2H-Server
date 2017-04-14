@@ -7,6 +7,8 @@
 var cfg = require('./config');
 console.log(cfg.host);
 
+var menu = require('./menu');
+console.log(menu.default.name);
 
 var _ = require('underscore');
 const express = require('express');
@@ -15,10 +17,18 @@ const path = require('path');
 const PORT = process.env.PORT || 3000;
 
 // Express Webserver
-const server = express()
-        .use(express.static(__dirname + '/pub'))
-        .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+const app = express();
+app.use(express.static(__dirname + '/pub'));
+app.set('view engine', 'ejs');
+const server = app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 const io = socketIO(server);
+
+app.get('/', function(req, res) {
+    console.log("REQ:" + req.query.view);
+    var page = req.query.view;
+    if (page === undefined) page='default';
+    res.render('pages/index',{active:page, menu : menu });
+});
 
 // mySQL Client
 var mysql = require('mysql');

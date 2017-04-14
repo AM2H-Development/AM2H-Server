@@ -1,0 +1,23 @@
+<!-- views/partials/header.ejs -->
+
+<div class="mdl-layout__header-row">
+  <span class="mdl-layout-title"><%= menu[active].name %></span>
+  <!-- Add spacer, to align navigation to the right -->
+  <div class="mdl-layout-spacer"></div>
+  <i id="cloudactive" style="margin-right:14px;" class="material-icons">cloud_done</i>
+  <div id="cloudactive-tt" class="mdl-tooltip" for="cloudactive">init</div>
+
+  <!-- Right aligned menu below button -->
+  <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon">
+    <i class="material-icons">more_vert</i>
+  </button>
+  <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right">
+    <li class="mdl-menu__item">
+      <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
+        <input type="checkbox" id="checkbox-1" class="mdl-checkbox__input" checked>
+        <span class="mdl-checkbox__label" style="position: fixed;">Debug</span>
+      </label>
+    </li>
+    <li disabled class="mdl-menu__item">&copy; 2017 AM²H</li>
+  </ul>    
+</div>
