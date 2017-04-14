@@ -29,7 +29,7 @@ class V{
 const v = new V();
 
 class DF {
-    constructor(args,style,renderer,compute,formatter,prescale=1,fraction=0,unit=""){
+    constructor(args,style,renderer,compute,formatter,prescale=10,fraction=1,unit=""){
         this.id=null;
         this.status=0; // 0=not initialized, 1=initialized and valid, 2=initialized need redraw
         this.style=style;
@@ -62,13 +62,17 @@ class DF {
         }
     }
     update(context){
+        console.log(this.id + " "+ this.status + " " + this.value);
         switch (this.status){
             case 0:
                 $(context).append(this.renderer(this.id,this.value,this.style));
                 this.status=1;
                 break;
             case 2:
-                $("#"+this.id).html(this.renderer(this.id,this.formatter(this.value,this.prescale,this.fraction,this.unit),this.style));
+                console.log($("#"+this.id).html());
+                // throw new Error("stop!");
+
+                $("#"+this.id).replaceWith(this.renderer(this.id,this.formatter(this.value,this.prescale,this.fraction,this.unit),this.style));
                 this.status=1;
                 break;
         }
@@ -85,6 +89,7 @@ class Listener{
     }
 }
 
+var renderInProcess=false;
 class Container {
     constructor(){
         this.id=0;
@@ -128,21 +133,26 @@ class Container {
         var value = split[1];
         console.log("Listener "+topic+" : "+value);
         _v.set(topic,value);
-        console.log(_l.get(topic).listener);
+        // console.log(_l.get(topic).listener);
         for (let df of _l.get(topic).listener){
-            console.log(df.id);
-            console.log(df.compute(df.args));
+            // console.log(df.id);
+            // console.log(df.compute(df.args));
             df.value = df.compute(df.args);
             df.status=2;
+            // console.log(_l);
         }
         c.render();
     }
     render(){
-        $(this.context).css(this.bgImage);
+        if (!renderInProcess){
+            renderInProcess=true;
+            $(this.context).css(this.bgImage);
 
-        for (let df of this.container) {
-            console.log(df.id);
-            df.update(this.context);
+            for (let df of this.container) {
+                // console.log("Render: "+df.id);
+                df.update(this.context);
+            }
+            renderInProcess=false;
         }
     }
 }
