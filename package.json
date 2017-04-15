@@ -8,14 +8,15 @@
     "client",
     "browser"
   ],
-  "description":"AM2H Server on Raspberry",
+  "description": "AM2H Server on Raspberry",
   "license": "MIT",
   "author": "mh",
   "repository": "n/a",
   "contributors": [],
   "dependencies": {
+    "ejs": "2.5.6",
     "express": "4.15.2",
-    "mqtt": "2.5.0",
+    "mqtt": "2.6.2",
     "mysql": "2.13.0",
     "socket.io": "1.7.3",
     "underscore": "1.8.3"

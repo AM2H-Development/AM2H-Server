@@ -1,0 +1,10 @@
+      <!-- Hauptmenü -->
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title"><%= menu[active].name %></span>
+        <nav class="mdl-navigation">
+<% for(var item in menu) { %>
+          <a class="mdl-navigation__link" href="/?view=<%= item %>"><%= menu[item].name %></a>
+<% } %>
+        </nav>
+      </div>  
+

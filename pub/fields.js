@@ -10,6 +10,8 @@ $(document).ready(function () {
     initFields();
 });
 
+var re={},cp={},fo={};
+
 const _l = new Map();
 const _v = new Map();
 
@@ -62,16 +64,14 @@ class DF {
         }
     }
     update(context){
-        console.log(this.id + " "+ this.status + " " + this.value);
         switch (this.status){
             case 0:
                 $(context).append(this.renderer(this.id,this.value,this.style));
                 this.status=1;
                 break;
             case 2:
-                console.log($("#"+this.id).html());
+                // console.log(this.id + " "+ this.status + " " + this.value);
                 // throw new Error("stop!");
-
                 $("#"+this.id).replaceWith(this.renderer(this.id,this.formatter(this.value,this.prescale,this.fraction,this.unit),this.style));
                 this.status=1;
                 break;
@@ -108,6 +108,16 @@ class Container {
         this.bgImage=bgImage;
     }
     addDF(args,style,unit,renderer,compute,formatter,prescale,fraction){
+        if(arguments.length<2){
+            style = args.style;
+            unit = args.unit;
+            renderer = args.renderer;
+            compute = args.compute;
+            formatter = args.formatter;
+            prescale = args.prescale;
+            fraction = args.fraction;
+            args = args.topics;
+        }
         var df = new DF(args,style,renderer,compute,formatter,prescale,fraction,unit);
         df.id="df"+this.id++;
         df.value=this.defVal;
@@ -116,6 +126,9 @@ class Container {
             this.addTopic(args[i],df);
         }
     }
+    /*addDF(args){
+        this.addDF(args.topics,args.style,args.unit,args.renderer,args.compute,args.formatter,args.prescale,args.fraction);
+    }*/
     addTopic(topic,df){
         _v.set(topic,null);
         if ( _l.get(topic) ){
