@@ -4,10 +4,10 @@
  */
 /* global __dirname */
 'use strict';
-var cfg = require('./config');
+var cfg = require('./cfg/config');
 console.log(cfg.host);
 
-var menu = require('./menu');
+var menu = require('./cfg/'+cfg.database+'/menu');
 
 var _ = require('underscore');
 const express = require('express');
@@ -18,6 +18,8 @@ const PORT = process.env.PORT || 3000;
 // Express Webserver
 const app = express();
 app.use(express.static(__dirname + '/pub'));
+app.use(express.static(__dirname + '/pub/' + cfg.database));
+
 app.set('view engine', 'ejs');
 const server = app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 const io = socketIO(server);
@@ -25,7 +27,7 @@ const io = socketIO(server);
 app.get('/', function(req, res) {
     console.log("REQ:" + req.query.view);
     var page = req.query.view;
-    if (page === undefined) page='default';
+    if (page === undefined || menu[page] === undefined) page='default';
     res.render('pages/index',{active:page, menu : menu });
 });
 

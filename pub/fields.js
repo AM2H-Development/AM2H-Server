@@ -10,6 +10,8 @@ $(document).ready(function () {
     initFields();
 });
 
+var re={},cp={},fo={};
+
 const _l = new Map();
 const _v = new Map();
 

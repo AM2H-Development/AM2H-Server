@@ -1,0 +1,37 @@
+/* 
+ * AM2H V.2.0.0 (c)2017 
+ */
+/* global c, v, socket, bgImage, re, fo, cp */
+
+
+function drawChart(){}
+
+function send(val) {
+    socket.emit('set', 'mh/location/raum1/state/temperature#'+val.replace(",", ".")*10);
+}
+
+
+function initFields(){
+    c.setContext("#contentlayer");
+    c.setBgImage(bgImage);
+    c.setDefaultValue("wait..");
+    c.addDF(["mh/location/raum1/state/temperature"],"width: 80px; left:  10px; top: 175px;" );
+    c.addDF(["mh/location/raum1/state/humidity"],"width: 80px; left:  10px; top: 200px;","",re.std,null,null,100,2 );
+    c.addDF(["mh/location/raum1/state/humidity"],"width: 80px; left:  10px; top: 225px;","",re.std,null,fo.fo2 );
+    c.addDF(["mh/location/raum1/state/temperature","mh/location/raum1/state/humidity"],"width: 80px; left:  10px; top: 250px;","",re.std,cp.add );
+    c.addDF(["mh/location/raum1/state/temperature","mh/location/raum1/state/humidity"],"width: 80px; left:  10px; top: 275px;"," °C",re.std,cp.add,fo.std,10,2 );
+    c.addDF({   topics: ["mh/location/raum1/state/temperature","mh/location/raum1/state/humidity"],
+                style: "width: 80px; left:  10px; top: 300px;",
+                unit: " °C",
+                renderer: re.clickable,
+                compute: cp.add,
+                formatter: fo.std,
+                prescale: 1000,
+                fraction: 2
+            });
+    c.addDF({   topics: ["mh/location/raum1/state/temperature"],
+                style: "width: 120px; left:  10px; top: 320px;",
+                renderer: re.input
+            });
+
+}

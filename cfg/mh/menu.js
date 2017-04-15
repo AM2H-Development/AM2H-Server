@@ -4,11 +4,9 @@
  * and open the template in the editor.
  */
 
-
-config = {
-    host          : "192.168.178.37",
-    mysqlUser     : 'pi',
-    database      : 'mh'
-};
-module.exports = config;
-
+var menu = {
+    default: {name:"Temperaturen",df:"dfmh.js"},
+    heizung: {name:"Heizung",df:"dfakm.js"}
+    };
+    
+module.exports = menu;
