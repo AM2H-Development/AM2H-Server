@@ -34,7 +34,7 @@ function initFields(){
                 unit: " °C",
                 renderer: re.clickable,
                 compute: cp.add,
-                formatter: fo.std,
+                formatter: fo.fo2,
                 prescale: 1000,
                 fraction: 2
             });

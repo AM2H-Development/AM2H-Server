@@ -29,17 +29,17 @@ re.toggleImage = function(id,val,style){
 };
 
 /* Computes */
-cp.add = function(a){return v.asF(a[0])+v.asF(a[1]);};
+cp.add = function(a){
+    var res=0;
+    for (var i=0;i<a.length;i++){res+=v.asF(a[i]);}
+    return res;
+};
 
 cp.toggle = function(a){console.log(a); return v.asI(a[0])===0 ? 1:0;};
 
 /* Formatters */
 fo.none = function(val){return val;};
-fo.std = function(val,prescale,fraction,unit){
-    // val =  (val+" ").replace(",", ".");
-    val /= prescale;
-    return val.toLocaleString('de-DE', {minimumFractionDigits: fraction, maximumFractionDigits: fraction}) + unit+"fo";
-};
+
 fo.fo2= function(val){
     return "fo2 "+val;
 };
