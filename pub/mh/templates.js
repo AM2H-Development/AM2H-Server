@@ -1,19 +1,7 @@
 /* 
  * Templates for Renderers, Computes, Formatters
  */
-
-
-/* global v, re, cp, fo */
-
-var bgImage = {
-    "background-image": "url(\"http://qxf.de/HeizungV2_image.svg\")",
-    "width": "1030px",
-    "height": "620px",
-    "background-size": "1030px 620px"
-};
-
-//function Re(){};
-        //= function(){}; // ,cp=function(){},fo=function(){};
+/* global v, re, cp, fo, _o */
 
 /* Renderers */
 re.clickable = function(id,val,style){
@@ -26,10 +14,27 @@ re.input = function(id,val,style){
     return "<div style=\""+style+"\" id=\""+id+"\">" + input + button + "</div>";
 };
 
+re.toggle = function(id,val,style){
+    var o= _o.get(id);
+    var onclick = "socket.emit('set', '"+o.args[0]+"#"+val+"');";
+    var icon = "<i class=\"material-icons\" onclick=\""+ onclick +"\">"+ o.icons[val] +"</i>";
+    return "<div style=\""+style+"\" id=\""+id+"\">" + icon + "</div>";
+};
+
+re.toggleImage = function(id,val,style){
+    var o= _o.get(id);
+    var onclick = "socket.emit('set', '"+o.args[0]+"#"+val+"');";
+    var icon = "<img src=\""+o.icons[val]+"\" onclick=\""+ onclick +"\">";
+    return "<div style=\""+style+"\" id=\""+id+"\">" + icon + "</div>";
+};
+
 /* Computes */
 cp.add = function(a){return v.asF(a[0])+v.asF(a[1]);};
 
+cp.toggle = function(a){console.log(a); return v.asI(a[0])===0 ? 1:0;};
+
 /* Formatters */
+fo.none = function(val){return val;};
 fo.std = function(val,prescale,fraction,unit){
     // val =  (val+" ").replace(",", ".");
     val /= prescale;

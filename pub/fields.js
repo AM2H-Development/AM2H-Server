@@ -14,6 +14,7 @@ var re={},cp={},fo={};
 
 const _l = new Map();
 const _v = new Map();
+const _o = new Map();
 
 class V{
     asI(v){
@@ -31,7 +32,7 @@ class V{
 const v = new V();
 
 class DF {
-    constructor(args,style,renderer,compute,formatter,prescale=10,fraction=1,unit=""){
+    constructor(args,style,renderer,compute,formatter,prescale=10,fraction=1,unit="",icons){
         this.id=null;
         this.status=0; // 0=not initialized, 1=initialized and valid, 2=initialized need redraw
         this.style=style;
@@ -40,6 +41,7 @@ class DF {
         this.prescale=prescale;
         this.fraction=fraction;
         this.unit=unit;
+        this.icons=icons;
         if (renderer instanceof Function){
             this.renderer=renderer;
         } else {
@@ -108,6 +110,8 @@ class Container {
         this.bgImage=bgImage;
     }
     addDF(args,style,unit,renderer,compute,formatter,prescale,fraction){
+        var icons;
+        var topics=args;
         if(arguments.length<2){
             style = args.style;
             unit = args.unit;
@@ -116,19 +120,19 @@ class Container {
             formatter = args.formatter;
             prescale = args.prescale;
             fraction = args.fraction;
-            args = args.topics;
+            topics = args.topics;
+            icons = args.icons;
+            console.log(icons);
         }
-        var df = new DF(args,style,renderer,compute,formatter,prescale,fraction,unit);
+        var df = new DF(topics,style,renderer,compute,formatter,prescale,fraction,unit,icons);
         df.id="df"+this.id++;
         df.value=this.defVal;
         this.container.add(df);
-        for (var i = 0, len = args.length; i < len; i++) {
-            this.addTopic(args[i],df);
+        _o.set(df.id,df);
+        for (var i = 0, len = topics.length; i < len; i++) {
+            this.addTopic(topics[i],df);
         }
     }
-    /*addDF(args){
-        this.addDF(args.topics,args.style,args.unit,args.renderer,args.compute,args.formatter,args.prescale,args.fraction);
-    }*/
     addTopic(topic,df){
         _v.set(topic,null);
         if ( _l.get(topic) ){
