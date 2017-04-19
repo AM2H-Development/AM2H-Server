@@ -6,15 +6,6 @@
 
 function drawChart(){}
 
-function send(val) {
-    socket.emit('set', 'mh/location/raum1/state/temperature#'+val.replace(",", ".")*10);
-}
-
-function sendt(val) {
-    socket.emit('set', 'mh/location/raum1/state/switch#'+val);
-}
-
-
 function initFields(){
     c.setContext("#contentlayer");
     c.setBgImage({
@@ -39,23 +30,22 @@ function initFields(){
                 fraction: 2
             });
     c.addDF({   topics: ["mh/location/raum1/state/temperature"],
-                style: "width: 120px; left:  10px; top: 320px;",
+                style: "width: 120px; left:  10px; top: 325px;",
                 renderer: re.input
             });
-c.addDF({   topics: ["mh/location/raum1/state/switch"],
-            style: "width: 120px; left:  10px; top: 320px;",
-            renderer: re.toggle,
+    c.addDF({   topics: ["mh/location/raum1/state/switch"],
+            style: "width: 120px; left:  10px; top: 350px;",
+            renderer: re.toggleIcon,
             formatter: fo.none,        
             compute: cp.toggle,
             icons: ["replay","touch_app"]
             });
 
-c.addDF({   topics: ["mh/location/raum1/state/switch"],
-            style: "width: 120px; left:  10px; top: 320px;",
+    c.addDF({   topics: ["mh/location/raum1/state/switch"],
+            style: "width: 120px; left:  10px; top: 420px;",
             renderer: re.toggleImage,
             formatter: fo.none,        
             compute: cp.toggle,
-            icons: ["/icons/Light_bulb_(yellow)_icon.svg","/icons/Light_bulb_(grey)_icon.svg"]
+            icons: ["/icons/Light_bulb_(yellow)_icon.svg","/icons/Light_bulb_(outline)_icon.svg","/icons/Light_bulb_(grey)_icon.svg"]
             });
-
 }

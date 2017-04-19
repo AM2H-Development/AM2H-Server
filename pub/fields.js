@@ -122,7 +122,7 @@ class Container {
             fraction = args.fraction;
             topics = args.topics;
             icons = args.icons;
-            console.log(icons);
+            // console.log(icons);
         }
         var df = new DF(topics,style,renderer,compute,formatter,prescale,fraction,unit,icons);
         df.id="df"+this.id++;
@@ -145,9 +145,9 @@ class Container {
         c.render();
     }
     updateValue(topicvalue){
-        var split = topicvalue.split('#', 2);
-        var topic = split[0];
-        var value = split[1];
+        // var split = topicvalue.split('#', 2);
+        var topic = topicvalue.topic; // split[0];
+        var value = topicvalue.message; //split[1];
         console.log("Listener "+topic+" : "+value);
         _v.set(topic,value);
         // console.log(_l.get(topic).listener);
@@ -172,5 +172,12 @@ class Container {
             renderInProcess=false;
         }
     }
+    send(topicmessage){
+        //console.log(topicmessage);
+        if (!isNaN(topicmessage.message)) topicmessage.message+="";
+        //console.log(topicmessage);
+        socket.emit('set',topicmessage);
+    }
 }
 const c = new Container();
+

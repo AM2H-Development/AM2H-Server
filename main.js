@@ -73,15 +73,15 @@ function respondPoll(data,socket){
     });
     
     query.on('result', (result) => {
-        console.log(result.valueOf());
-        socket.emit(data.toString(),data.toString() + "#" + result.message);
+        console.log("Send to client " + data.toString() + " value: " + result.message);
+        socket.emit(data.toString(),{topic:data.toString(),message:result.message}); // + "#" + result.message);
     });
 }
 
 function respondSet(data,socket){
-    var split = data.split('#',2);
-    mqttClient.publish(split[0],split[1]);
-    console.log('Client sent ' + data.toString() + ' on ' + socket.id);
+    // var split = data.split('#',2);
+    mqttClient.publish(data.topic,data.message); //split[0],split[1]);
+    console.log('Client sent ' + data.topic + ' with value: ' + data.message + ' on ' + socket.id);
 }
 
 /*mysqlClient.query('SELECT * FROM mqtt LIMIT 1', function (error, results) {
@@ -95,11 +95,11 @@ mqttClient.on('connect', function () {
   console.log("MQTT connected");
 });
  
-mqttClient.on('message', function (topic, message) {
-    console.log(topic.toString() + "#" + message.toString());
+mqttClient.on('message', function (topic, message, pg) {
+    console.log("Received from MQTT: " + topic.toString() + " value: " + message.toString());
     var post  = {message: message.toString(), topic: topic.toString()};
     mysqlClient.query('INSERT INTO '+ cfg.database +'.' + cfg.database + ' SET ?', post, function (error) {
         if (error) throw error;
     });
-    io.emit(topic,topic + "#" + message.toString());
+    io.emit(topic,post); // {topic: topic.toString(), message: message.toString()}); //  + "#" + message.toString());
 });
