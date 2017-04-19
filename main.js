@@ -7,17 +7,18 @@
 var cfg = require('./cfg/config');
 console.log(cfg.host);
 
-const t = require('./topics');
- t.hello("MH");
+const t = require('./topicsContainer');
+ t.add("MH",{hello:"abc"});
  console.log(t.printM());
- t.hello("MH2");
+ t.add("MH2","cdef");
  console.log(t.printM());
 
-const r = require('./topics');
+const r = require('./topicsContainer');
  console.log(r.printM());
 
 require('./cfg/'+cfg.database+'/topics');
 
+t.poll();
 process.exit(1);
 
 var menu = require('./cfg/'+cfg.database+'/menu');

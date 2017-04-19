@@ -3,6 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+// Topic : log [atLeast:interval,atMost:interval,every:interval,onEvent:[internal,external]], storageLife: interval, fireMqtt: [true,false]
+
 const m = new Map();
 var cnt =0;
 
@@ -10,13 +13,17 @@ class T {
     constructor(){
         console.log("T constructor: ");
     }
-    hello(hello){
-        console.log("Hello, "+hello);
-                m.set(cnt++,"2");
+    add(topic,options){
+        m.set(topic,options);
 
     }
     printM(){
         return m.size;
+    }
+    poll(){
+        for (var topic of m){
+            console.log(topic);
+        }
     }
 }
 
