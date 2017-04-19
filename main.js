@@ -7,6 +7,19 @@
 var cfg = require('./cfg/config');
 console.log(cfg.host);
 
+const t = require('./topics');
+ t.hello("MH");
+ console.log(t.printM());
+ t.hello("MH2");
+ console.log(t.printM());
+
+const r = require('./topics');
+ console.log(r.printM());
+
+require('./cfg/'+cfg.database+'/topics');
+
+process.exit(1);
+
 var menu = require('./cfg/'+cfg.database+'/menu');
 
 var _ = require('underscore');
@@ -101,5 +114,5 @@ mqttClient.on('message', function (topic, message, pg) {
     mysqlClient.query('INSERT INTO '+ cfg.database +'.' + cfg.database + ' SET ?', post, function (error) {
         if (error) throw error;
     });
-    io.emit(topic,post); // {topic: topic.toString(), message: message.toString()}); //  + "#" + message.toString());
+    io.emit(topic,post);
 });
