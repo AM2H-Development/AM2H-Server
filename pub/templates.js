@@ -4,6 +4,7 @@
 /* global v, re, cp, fo, _o, socket */
 
 /* Renderers */
+
 re.clickable = function(id,val,style){
     return "<div class=\"df clickable\" id=\""+id+"\" style=\""+style+"\" onclick=\"$('#detailcard').show( 'fast' ); $('#linechart_progressbar').show(); drawChart(this);\">"+val+"</div>";
 };

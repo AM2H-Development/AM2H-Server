@@ -5,8 +5,13 @@
  */
 
 var menu = {
-    default: {name:"Temperaturen",df:"dfmh.js"},
-    heizung: {name:"Heizung",df:"dfakm.js"}
+    default: {name:"Heizung",df:"df_heizung.js"},
+    lueftung: {name:"Lüftung",df:"df_lueftung.js"},
+    strom: {name:"Strom",df:"df_strom.js"},
+    wasser: {name:"Wasser",df:"df_wasser.js"},
+    tempEG: {name:"Temperaturen EG",df:"df_temp_eg.js"},
+    tempOG: {name:"Temperaturen OG",df:"df_temp_og.js"},   
+    Test: {name:"Test",df:"dfmh.js"}   
     };
     
 module.exports = menu;
