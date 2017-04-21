@@ -27,6 +27,8 @@ class M {
         this.oldDusk=true; // Abenddämmerung
     }
     setMqtt(cfg){
+        if (cfg.latitude === undefined) cfg.latitude=49.080864;
+        if (cfg.longitude === undefined) cfg.longitude=9.070314;
         this.cfg=cfg;
         mqttClient= mqtt.connect('mqtt://' + cfg.host);
         this.root=cfg.database;        
