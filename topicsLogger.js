@@ -68,6 +68,7 @@ class T {
         var date = Date.now();
         if (item[1].last + (item[1].interval*1000) < date){
             console.log("logger::::every " + item[0] + " " + item[1].message);
+            this.logToMysql(item[0],item[1].message);
             item[1].last=date;
             return true;
         }
@@ -78,6 +79,7 @@ class T {
         var date = Date.now();
         if (item[1].last + (item[1].interval*1000) < date && item[1].newMessage){
             console.log("logger::::atMost " + item[0] + " " + item[1].message);
+            this.logToMysql(item[0],item[1].message);
             item[1].last=date;
             item[1].newMessage=false;
             return true;
@@ -90,6 +92,7 @@ class T {
         var date = Date.now();
         if (item[1].last + (item[1].interval*1000) < date || item[1].newMessage){
             console.log("logger::::atLeast " + item[0] + " " + item[1].message);
+            this.logToMysql(item[0],item[1].message);
             item[1].last=date;
             item[1].newMessage=false;
             return true;
@@ -99,6 +102,7 @@ class T {
     log_all(item){
         if (!item[1].message || !item[1].newMessage) return false;
         console.log("logger::::all " + item[0] + " " + item[1].message);
+        this.logToMysql(item[0],item[1].message);
         item[1].newMessage=false;
         return true;
     }
@@ -109,12 +113,19 @@ class T {
         }
         if (_t.get(item[1].trigger)){
             console.log("logger::::onEvent " + item[0] + " " + item[1].message);
+            this.logToMysql(item[0],item[1].message);
             _t.set(item[1].trigger,false);
             return true;
         }
         return false;
     }
-
+    logToMysql(topic,message){
+        //console.log("Received from MQTT: " + topic.toString() + " value: " + message.toString());
+        var post  = {message: message.toString(), topic: topic.toString()};
+        this.mysqlClient.query('INSERT INTO '+ this.cfg.database +'.' + this.cfg.database + ' SET ?', post, (error) =>{
+            if (error) throw error;
+        });   
+    }
     stop(){
         clearInterval(this.timeout);
     }
