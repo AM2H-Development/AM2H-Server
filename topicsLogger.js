@@ -7,11 +7,11 @@ const _t = new Map();
 class LogContainer{
     constructor(options){
         this.topic=options.topic;
-        this.client;
+        // this.client;
         this.message;
         this.newMessage=false;
         this.last= 0;
-        this.condition =options.condition === undefined ? "all" : options.condition;
+        this.condition =options.condition === undefined ? "none" : options.condition;
         this.interval  =options.interval  === undefined ? 0 : options.interval;
         this.trigger   =options.trigger  === undefined ? "" : options.trigger;
     }
@@ -52,6 +52,8 @@ class T {
         if (item){
             item.message=message;
             item.newMessage=true;
+        } else {
+            _m.set(topic,new LogContainer({topic:topic,message:message,newMessage:true}));
         }
     }
     poll(obj){
@@ -62,6 +64,9 @@ class T {
                 console.log("condition '" + item[1].condition + "' not found!");
             }
         }
+    }
+    log_none(){
+        return false;
     }
     log_every(item){
         if (!item[1].message) return false;
