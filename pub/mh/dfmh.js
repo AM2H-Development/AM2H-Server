@@ -40,12 +40,15 @@ function initFields(){
             compute: cp.toggle,
             icons: ["replay","touch_app"]
             });
-
     c.addDF({   topics: ["mh/location/raum1/state/switch"],
             style: "width: 120px; left:  10px; top: 420px;",
             renderer: re.toggleImage,
             formatter: fo.none,        
             compute: cp.toggle,
             icons: ["/icons/Light_bulb_(yellow)_icon.svg","/icons/Light_bulb_(outline)_icon.svg","/icons/Light_bulb_(grey)_icon.svg"]
+            });
+    c.addDF({   topics: ["mh/event/timer/seconds"],
+            style: "width: 120px; left:  10px; top: 450px;",
+            formatter: fo.none        
             });
 }

@@ -8,18 +8,11 @@ var cfg = require('./cfg/config');
 console.log(cfg.host);
 
 const t = require('./topicsContainer');
- t.add("MH",{hello:"abc"});
- console.log(t.printM());
- t.add("MH2","cdef");
- console.log(t.printM());
-
-const r = require('./topicsContainer');
- console.log(r.printM());
 
 require('./cfg/'+cfg.database+'/topics');
 
-t.poll();
-process.exit(1);
+
+//process.exit(1);
 
 var menu = require('./cfg/'+cfg.database+'/menu');
 
@@ -67,8 +60,11 @@ mysqlClient.query("CREATE TABLE IF NOT EXISTS " + cfg.database + "." + cfg.datab
 }); 
 
 // MQTT Client
-var mqtt = require('mqtt');
-var mqttClient  = mqtt.connect('mqtt://' + cfg.host);
+const mqtt = require('mqtt');
+const mqttClient  = mqtt.connect('mqtt://' + cfg.host);
+const timer = require('./mqttTimer');
+timer.setMqtt(cfg);
+timer.start();
 
 io.on('connection', (socket) => {
     console.log('Client connected');

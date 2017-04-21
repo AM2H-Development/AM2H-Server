@@ -50,7 +50,7 @@ class DF {
         if (compute instanceof Function){
             this.compute=compute;
         } else {
-            this.compute=function(args){return v.asF(args[0]);};
+            this.compute=function(args){return v.asS(args[0]);};
         }
         if (formatter instanceof Function){
             this.formatter=formatter;
