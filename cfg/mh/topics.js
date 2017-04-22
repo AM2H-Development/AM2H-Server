@@ -6,9 +6,11 @@
 const t = require('../../topicsLogger');
 t.addLogger({topic:"mh/event/timer/seconds",condition:"every",interval:5});
 t.addLogger({topic:"mh/event/timer/minutes",condition:"atLeast",interval:18});
-t.addLogger({topic:"mh/location/raum1/state/humidity",condition:"all"});
+t.addLogger({topic:"mh/location/raum1/state/temperature",condition:"all",newonly:true});
 t.addLogger({topic:"mh/location/raum1/state/switch",condition:"atMost",interval:5});
-t.addLogger({topic:"mh/location/raum1/state/temperature",condition:"onEvent",trigger:"mh/location/raum1/state/switch"});
+t.addLogger({topic:"mh/location/raum1/state/humidity",condition:"onEvent",trigger:"mh/location/raum1/state/switch"});
+
+t.addCleanup({topic:"mh/event/timer/seconds",unit:"seconds",lifespan:30});
 
 //t.addReact(source:{topic:"mh/location/gas/state/counter"},targetTopic:"mh/location/gas/state/counterlastday",condition:"onEvent",trigger:"mh/event/timer/date"); 
 //t.addReact(source:{topic:"mh/location/raum1/state/switch"},targetTopic:"mh/location/raum1/state/lamp",condition:"onEvent",trigger:"mh/event/timer/date"); 

@@ -1,26 +1,43 @@
 /* 
  * Topic Logger Filter
  */
-const _m = new Map();
-const _t = new Map();
+var moment = require('moment');
+
+const _m = new Map(); // Logger (topic,LogContainer)
+const _t = new Map(); // Triggers (topic, timestamp)
+const _c = new Map(); // Cleanups (topic, CleanupContainer)
 
 class LogContainer{
     constructor(options){
         this.topic=options.topic;
         // this.client;
         this.message;
+        this.loggedMessage="";
         this.newMessage=false;
         this.last= 0;
+        this.newonly   =options.newonly ? options.newonly: false;
         this.condition =options.condition === undefined ? "none" : options.condition;
         this.interval  =options.interval  === undefined ? 0 : options.interval;
         this.trigger   =options.trigger  === undefined ? "" : options.trigger;
     }
 };
 
+class CleanupContainer{
+    constructor(options){
+        this.topic=options.topic;
+        this.last= 0;
+        this.lifespan =options.lifespan === undefined ? -1 : options.lifespan;
+        this.unit  =options.unit  === undefined ? "none" : options.unit;
+    }
+};
+
 class T {
     constructor(){
+        this.pollFrequency=100; // ms
+        this.cleanupFrequency=30*1000; //ms
         this.mysqlClient;
-        this.timeout;
+        this.logTimer;
+        this.cleanupTimer;
         this.cfg;
         console.log("T constructor: ");
     }
@@ -30,23 +47,28 @@ class T {
     setCfg(cfg){
         this.cfg=cfg;
     }
+    addCleanup(options){
+        console.log("cleaning " + options.topic + " with option " + options.lifespan + " " + options.unit);
+        _c.set(options.topic,new CleanupContainer(options));        
+    }
     addLogger(options){
         // Topic : log [atLeast:interval,atMost:interval,every:interval,all:[],onEvent:[internal,external]], 
         // storageLife: interval, fireMqtt: [true,false]
         if (!this["log_"+options.condition]){
-            console.error("Error adding " + options.topic + " with option " + options.condition + " " + options.interval  + " s");
+            console.error("Error adding " + options.topic + " with option " + options.condition);
             return;
         }
-        console.log("adding " + options.topic + " with option " + options.condition + " " + options.interval  + " s");
+        console.log("adding " + options.topic + " with option " + options.condition + " " + options.interval  + " s | newonly=" + options.newonly);
         _m.set(options.topic,new LogContainer(options));
     }
     start(){
         if (this.mysqlClient === undefined ) return false;
-        this.timeout = setInterval(this.poll,100,this);
+        this.logTimer = setInterval(this.poll,this.pollFrequency,this);
+        this.logTimer = setInterval(this.cleanup,this.cleanupFrequency,this);
         return true;
     }
     trigger(topic,message){
-        _t.set(topic,true);
+        _t.set(topic,Date.now());
         // console.log("topic logger received " + topic + " " + message);
         var item = _m.get(topic);
         if (item){
@@ -56,13 +78,19 @@ class T {
             _m.set(topic,new LogContainer({topic:topic,message:message,newMessage:true}));
         }
     }
+    cleanup(obj){
+        for (var item of _c){
+            var timestamp = moment().subtract(item[1].lifespan, item[1].unit).format("YYYY-MM-DD HH:mm:ss.S");
+            console.log(moment().format("YYYY-MM-DD HH:mm:ss.S") + " cleaning " + item[0] + " to " + timestamp);
+            obj.cleanupMysql(item[0],timestamp);
+        }        
+    }
     poll(obj){
         for (var item of _m){
             if (obj["log_"+item[1].condition]){
                 obj["log_"+item[1].condition](item);
             }
         }
-        _t.clear(); // .set(item[1].trigger,false);
     }
     log_none(){
         return false;
@@ -71,8 +99,11 @@ class T {
         if (!item[1].message) return false;
         var date = Date.now();
         if (item[1].last + (item[1].interval*1000) < date){
-            console.log("logger::::every " + item[0] + " " + item[1].message);
-            this.logToMysql(item[0],item[1].message);
+           if(!item[1].newonly || (item[1].newonly && (item[1].loggedMessage.toString() !== item[1].message.toString()))){
+                console.log("logger::::every " + item[0] + " " + item[1].message);
+                this.logToMysql(item[0],item[1].message);
+                item[1].loggedMessage=item[1].message;
+            }
             item[1].last=date;
             return true;
         }
@@ -82,8 +113,11 @@ class T {
         if (!item[1].message) return false;
         var date = Date.now();
         if (item[1].last + (item[1].interval*1000) < date && item[1].newMessage){
-            console.log("logger::::atMost " + item[0] + " " + item[1].message);
-            this.logToMysql(item[0],item[1].message);
+            if(!item[1].newonly || (item[1].newonly && (item[1].loggedMessage.toString() !== item[1].message.toString()))){
+                console.log("logger::::atMost " + item[0] + " " + item[1].message);
+                this.logToMysql(item[0],item[1].message);
+                item[1].loggedMessage=item[1].message;
+            }
             item[1].last=date;
             item[1].newMessage=false;
             return true;
@@ -95,8 +129,11 @@ class T {
         if (!item[1].message) return false;
         var date = Date.now();
         if (item[1].last + (item[1].interval*1000) < date || item[1].newMessage){
-            console.log("logger::::atLeast " + item[0] + " " + item[1].message);
-            this.logToMysql(item[0],item[1].message);
+            if(!item[1].newonly || (item[1].newonly && (item[1].loggedMessage.toString() !== item[1].message.toString()))){
+                console.log("logger::::atLeast " + item[0] + " " + item[1].message);
+                this.logToMysql(item[0],item[1].message);
+                item[1].loggedMessage=item[1].message;
+            }
             item[1].last=date;
             item[1].newMessage=false;
             return true;
@@ -105,19 +142,28 @@ class T {
     }
     log_all(item){
         if (!item[1].message || !item[1].newMessage) return false;
-        console.log("logger::::all " + item[0] + " " + item[1].message);
-        this.logToMysql(item[0],item[1].message);
+        if (!item[1].newonly || (item[1].newonly && (item[1].loggedMessage.toString() !== item[1].message.toString()))){
+            if(!item[1].newonly || (item[1].newonly && (item[1].loggedMessage.toString() !== item[1].message.toString()))){
+                console.log("logger::::all " + item[0] + " " + item[1].message);
+                this.logToMysql(item[0],item[1].message);
+                item[1].loggedMessage=item[1].message;
+            }
+        }
         item[1].newMessage=false;
         return true;
     }
     log_onEvent(item){
         if (!item[1].message){
-            _t.set(item[1].trigger,false);
+            _t.set(item[1].last,Date.now());
             return false;
         }
-        if (_t.get(item[1].trigger)){
-            console.log("logger::::onEvent " + item[0] + " " + item[1].message);
-            this.logToMysql(item[0],item[1].message);
+        if (_t.get(item[1].trigger)>item[1].last){
+            item[1].last=Date.now();
+            if(!item[1].newonly || (item[1].newonly && (item[1].loggedMessage.toString() !== item[1].message.toString()))){
+                console.log("logger::::onEvent " + item[0] + " " + item[1].message);
+                this.logToMysql(item[0],item[1].message);
+                item[1].loggedMessage=item[1].message;
+            }
             return true;
         }
         return false;
@@ -129,8 +175,14 @@ class T {
             if (error) throw error;
         });   
     }
+    cleanupMysql(topic,timestamp){
+        this.mysqlClient.query('DELETE FROM '+ this.cfg.database +'.' + this.cfg.database + ' WHERE topic = ? and ts < ?', [topic,timestamp], (error) =>{
+            if (error) throw error;
+        });
+    }
     stop(){
-        clearInterval(this.timeout);
+        clearInterval(this.logTimer);
+        clearInterval(this.cleanupTimer);
     }
     list(){
         for (var topic of _m){

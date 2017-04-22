@@ -81,9 +81,9 @@ mqttClient.on('connect', () => {
 mqttClient.on('message', (topic, message, pg) => {
     //console.log("Received from MQTT: " + topic.toString() + " value: " + message.toString());
     var post  = {message: message.toString(), topic: topic.toString()};
-    mysqlClient.query('INSERT INTO '+ cfg.database +'.' + cfg.database + ' SET ?', post, (error) =>{
+    /* mysqlClient.query('INSERT INTO '+ cfg.database +'.' + cfg.database + ' SET ?', post, (error) =>{
         if (error) throw error;
-    });
+    });*/
     t.trigger(topic,message);
     io.emit(topic,post);
 });
