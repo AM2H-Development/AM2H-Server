@@ -15,6 +15,11 @@ t.setCfg(cfg);
 require('./cfg/'+cfg.database+'/topics');
 t.list();
 
+// MQTT React
+const r = require('./mqttReact');
+require('./cfg/'+cfg.database+'/react');
+
+
 // Load Dynamic Pages Structure
 var menu = require('./cfg/'+cfg.database+'/menu');
 

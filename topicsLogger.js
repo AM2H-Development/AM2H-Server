@@ -34,12 +34,12 @@ class CleanupContainer{
 class T {
     constructor(){
         this.pollFrequency=100; // ms
-        this.cleanupFrequency=30*1000; //ms
+        this.cleanupFrequency=30*60*1000; //ms
         this.mysqlClient;
         this.logTimer;
         this.cleanupTimer;
         this.cfg;
-        console.log("T constructor: ");
+        this.lastTopic;
     }
     setMysqlClient(client){
         this.mysqlClient=client;
@@ -48,18 +48,22 @@ class T {
         this.cfg=cfg;
     }
     addCleanup(options){
+        if (!options.topic){
+            if (!this.lastTopic) throw "Error, no last topic available";
+            options.topic=this.lastTopic;
+        }
         console.log("cleaning " + options.topic + " with option " + options.lifespan + " " + options.unit);
-        _c.set(options.topic,new CleanupContainer(options));        
+        _c.set(options.topic,new CleanupContainer(options));
+        return this;
     }
     addLogger(options){
-        // Topic : log [atLeast:interval,atMost:interval,every:interval,all:[],onEvent:[internal,external]], 
-        // storageLife: interval, fireMqtt: [true,false]
         if (!this["log_"+options.condition]){
-            console.error("Error adding " + options.topic + " with option " + options.condition);
-            return;
+            throw "Error adding " + options.topic + " with option " + options.condition;
         }
         console.log("adding " + options.topic + " with option " + options.condition + " " + options.interval  + " s | newonly=" + options.newonly);
         _m.set(options.topic,new LogContainer(options));
+        this.lastTopic=options.topic;
+        return this;
     }
     start(){
         if (this.mysqlClient === undefined ) return false;
