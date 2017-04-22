@@ -60,10 +60,9 @@ class T {
         for (var item of _m){
             if (obj["log_"+item[1].condition]){
                 obj["log_"+item[1].condition](item);
-            } else {
-                console.log("condition '" + item[1].condition + "' not found!");
             }
         }
+        _t.clear(); // .set(item[1].trigger,false);
     }
     log_none(){
         return false;
@@ -119,7 +118,6 @@ class T {
         if (_t.get(item[1].trigger)){
             console.log("logger::::onEvent " + item[0] + " " + item[1].message);
             this.logToMysql(item[0],item[1].message);
-            _t.set(item[1].trigger,false);
             return true;
         }
         return false;
