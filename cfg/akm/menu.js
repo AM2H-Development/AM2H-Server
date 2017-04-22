@@ -10,8 +10,7 @@ var menu = {
     strom: {name:"Strom",df:"df_strom.js"},
     wasser: {name:"Wasser",df:"df_wasser.js"},
     tempEG: {name:"Temperaturen EG",df:"df_temp_eg.js"},
-    tempOG: {name:"Temperaturen OG",df:"df_temp_og.js"},   
-    Test: {name:"Test",df:"dfmh.js"}   
+    tempOG: {name:"Temperaturen OG",df:"df_temp_og.js"} 
     };
     
 module.exports = menu;
