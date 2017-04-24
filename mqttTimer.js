@@ -84,7 +84,7 @@ class M {
             if (moment().isoWeekday() !== obj.oldDay) {
                 mqttClient.publish(obj.root + "/event/timer/day",moment().isoWeekday().toString());
                 obj.oldDay=moment().isoWeekday();
-                obj.sunTimes = SunCalc.getTimes(new Date(),this.cfg.latitude, this.cfg.longitude);
+                obj.sunTimes = SunCalc.getTimes(new Date(),obj.cfg.latitude, obj.cfg.longitude);
                 obj.oldDawn=true;
                 obj.oldDusk=true;
             }
