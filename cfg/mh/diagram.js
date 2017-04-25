@@ -7,8 +7,8 @@
 var diagram = {
     chart:{
         intervals:[
-            {abr:"200",label:"200 Werte"},
-            {abr:"500",label:"500 Werte"},
+            {abr:"200m",label:"200 Minuten"},
+            {abr:"500m",label:"500 Minuten"},
             {abr:"1d", label:"1 Tag"},
             {abr:"7d", label:"7 Tage"}
         ]

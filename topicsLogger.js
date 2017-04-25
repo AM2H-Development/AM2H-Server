@@ -58,7 +58,7 @@ class T {
         this.mysqlClient=mysqlClient;
         
         mysqlClient.query('CREATE DATABASE IF NOT EXISTS ' + cfg.database +';', (error) => {
-            if (error) tLog.error("Error: connect ETIMEDOUT");
+            if (error) tLog.error("Error: connect ETIMEDOUT at CREATE DATABASE");
         }); 
 
         mysqlClient.query("CREATE TABLE IF NOT EXISTS " + cfg.database + "." + cfg.database +" ("
@@ -66,7 +66,7 @@ class T {
                             + " topic VARCHAR(255), message VARCHAR(255),"
                             + " ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
                             + ");", (error) => {
-            if (error) throw error;
+            if (error) tLog.error("Error: connect ETIMEDOUT at CREATE TABLE");
         }); 
 
         return this;
@@ -209,6 +209,16 @@ class T {
         });
     }
     query(data){
+        var query = this.mysqlClient.query('SELECT message FROM '+ this.cfg.database +'.' + this.cfg.database + ' WHERE topic = ? ORDER BY id DESC LIMIT 1', data.toString());
+
+        query.on('error', (error) => {
+            throw error;
+        });
+        
+        return query;
+    }
+    queryChart(data){
+        // todo
         var query = this.mysqlClient.query('SELECT message FROM '+ this.cfg.database +'.' + this.cfg.database + ' WHERE topic = ? ORDER BY id DESC LIMIT 1', data.toString());
 
         query.on('error', (error) => {

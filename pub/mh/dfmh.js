@@ -18,6 +18,7 @@ function initFields(){
     c.addDF(["mh/location/raum1/state/temperature","mh/location/raum1/state/humidity"],"width: 80px; left:  10px; top: 250px;","",re.std,cp.add );
     c.addDF(["mh/location/raum1/state/temperature","mh/location/raum1/state/humidity"],"width: 80px; left:  10px; top: 275px;"," °C",re.std,cp.add,fo.std,10,2 );
     c.addDF({   topics: ["mh/location/raum1/state/temperature","mh/location/raum1/state/humidity"],
+                label: "Raum1 Temperatur",
                 style: "width: 80px; left:  10px; top: 300px;",
                 unit: " °C",
                 renderer: re.clickable,

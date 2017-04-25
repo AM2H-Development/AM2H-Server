@@ -76,6 +76,15 @@ io.on('connection', (socket) => {
             socket.emit(data.toString(),{topic:data.toString(),message:result.message});
         });
     });
+    socket.on('chart', (data) => {
+        socketsLog.debug('CHART: Client ask for ' + data.topics.toString() + ' with ' + data.interval.toString() + ' on ' + socket.id);
+        var query = t.queryChart(data);
+        query.on('result', (result) => {
+            socketsLog.debug("Send to client " + data.toString() + " value: " + result.message);
+            socket.emit('chartdata',{data:"123"});
+        });
+
+    });
     socket.on('set', (data) => {
         mqttClient.publish(data.topic,data.message);
         mqttLog.debug('Client sent ' + data.topic + ' with value: ' + data.message + ' on ' + socket.id);
