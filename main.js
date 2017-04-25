@@ -28,7 +28,8 @@ const r = require('./mqttReact');
 require('./cfg/'+cfg.database+'/react');
 
 // Load Dynamic Pages Structure
-var menu = require('./cfg/'+cfg.database+'/menu');
+var menu    = require('./cfg/'+cfg.database+'/menu');
+var diagram = require('./cfg/'+cfg.database+'/diagram');
 
 // Express Webserver and Socket.io
 const express = require('express');
@@ -46,7 +47,7 @@ app.get('/', (req, res) => {
     httpLog.info("REQ:" + req.query.view);
     var page = req.query.view;
     if (page === undefined || menu[page] === undefined) page='default';
-    res.render('pages/index',{active:page, menu : menu });
+    res.render('pages/index',{active:page, menu:menu, diagram:diagram });
 });
 
 // MQTT Client

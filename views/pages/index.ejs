@@ -17,50 +17,9 @@
       <main class="mdl-layout__content" style="overflow:auto;">
  
         <!-- Datenfelder -->
-        <div id="contentlayer" class="page-content">
+        <div id="contentlayer" class="page-content"> </div>
 
-
-        </div>
-
-        <!-- Detailcard  -->
-        <div id="detailcard" style="display:none;" data-interval="1d">
-          <div class="mdl-card mdl-shadow--4dp" style="width: 632px;">
-            <!-- Detailcard Titel -->
-            <div class="mdl-card__title mdl-card--expand">
-              <h2 class="mdl-card__title-text">Details</h2>
-            </div>
-            <!-- Detailcard Inhalt -->
-            <div class="mdl-card__media">
-              <div id="linechart_progressbar_spacer">
-                <div id="linechart_progressbar" style="width:632px;" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
-              </div>
-              <div id="linechart_material"></div>
-            </div>
-            <!-- Detailcard Menüleiste -->
-            <div class="mdl-card__menu mdl-card--border" style="display: flex;box-sizing:border-box;align-items:center;">
-              <!-- Detailcard refresh -->
-              <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" onclick="$('#linechart_progressbar').show(); drawChart();" >
-                <i class="material-icons">autorenew</i>
-              </button>
-              <div class="mdl-layout-spacer"></div>
-              <!-- Detailmenü -->
-              <button  id="detailcardtimescale" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                <i class="material-icons">more_vert</i>
-              </button>
-              <ul id="chartScale" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="detailcardtimescale">
-                <!--<li data-interval="7d"   class="mdl-menu__item" onclick="updateGraphInterval(this);$('#linechart_progressbar').show(); drawChart();">7 Tage</li>
-                <li data-interval="1d"   class="mdl-menu__item" onclick="updateGraphInterval(this);$('#linechart_progressbar').show(); drawChart();">1 Tag</li>
-                <li data-interval="100"  class="mdl-menu__item" onclick="updateGraphInterval(this);$('#linechart_progressbar').show(); drawChart();">100 Werte</li>
-                -->
-              </ul>    
-              <!-- Detailcard close -->
-              <div class="mdl-layout-spacer"></div>
-              <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" onclick="$('#detailcard').hide( 'fast' );" >
-                <i class="material-icons">close</i>
-              </button>
-            </div>
-          </div>
-        </div>
+        <% include ../partials/detailcard %>
       </main>
     </div>
   </body>

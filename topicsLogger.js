@@ -58,7 +58,7 @@ class T {
         this.mysqlClient=mysqlClient;
         
         mysqlClient.query('CREATE DATABASE IF NOT EXISTS ' + cfg.database +';', (error) => {
-            if (error) throw error;
+            if (error) tLog.error("Error: connect ETIMEDOUT");
         }); 
 
         mysqlClient.query("CREATE TABLE IF NOT EXISTS " + cfg.database + "." + cfg.database +" ("

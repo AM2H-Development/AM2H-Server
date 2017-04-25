@@ -3,9 +3,6 @@
  */
 /* global c, v, socket, bgImage, re, fo, cp */
 
-
-function drawChart(){}
-
 function initFields(){
     c.setContext("#contentlayer");
     c.setBgImage({

@@ -6,7 +6,7 @@
 /* Renderers */
 
 re.clickable = function(id,val,style){
-    return "<div class=\"df clickable\" id=\""+id+"\" style=\""+style+"\" onclick=\"$('#detailcard').show( 'fast' ); $('#linechart_progressbar').show(); drawChart(this);\">"+val+"</div>";
+    return "<div class=\"df clickable\" id=\""+id+"\" style=\""+style+"\" onclick=\"openChart('" + id + "')\">"+val+"</div>";
 };
 
 re.input = function(id,val,style){
