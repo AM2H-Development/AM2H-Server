@@ -80,18 +80,18 @@ function initFields(){
                 fraction: 1
             }); 
     c.addDF({   topics: ["akm/d05/state/mode01"],
-                style: "width: 10px; left: 186px; top: 415px;",
-                renderer: re.toggleImage,
-                formatter: fo.none,        
-                compute: cp.toggle,
-                icons: ["/icons/Zuluft_direkt_icon.svg","/icons/Zuluft_EWT_icon.svg"]
-                });
-    c.addDF({   topics: ["akm/d05/state/mode02"],
                 style: "width: 10px; left: 391px; top: 428px;",
                 renderer: re.toggleImage,
                 formatter: fo.none,        
                 compute: cp.toggle,
-                icons: ["/icons/Bypass_offen_icon.svg","/icons/Bypass_geschlossen_icon.svg"]
+                icons: ["/icons/Bypass_(geschlossen)_icon.svg","/icons/Bypass_(offen)_icon.svg","/icons/Bypass_(outline)_icon.svg"]
+                });
+    c.addDF({   topics: ["akm/d05/state/mode02"],
+                style: "width: 10px; left: 186px; top: 415px;",
+                renderer: re.toggleImage,
+                formatter: fo.none,        
+                compute: cp.toggle,
+                icons: ["/icons/Zuluft_(EWT)_icon.svg","/icons/Zuluft_(direkt)_icon.svg","/icons/Zuluft_(outline)_icon.svg"]
             });
     c.addDF({   topics: ["akm/d05/state/mode02"],
                 style: "width: 100px; left:  220px; top: 500px;",

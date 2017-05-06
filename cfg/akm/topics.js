@@ -10,6 +10,6 @@ t.addLogger({topic:"akm/location/raum1/state/humidity",condition:"all"});
 t.addLogger({topic:"akm/location/raum1/state/switch",condition:"atMost",interval:5});
 t.addLogger({topic:"akm/location/raum1/state/temperature",condition:"onEvent",trigger:"mh/location/raum1/state/switch"});
 
-//t.addReact(source:{topic:"mh/location/gas/state/counter"},targetTopic:"mh/location/gas/state/counterlastday",condition:"onEvent",trigger:"mh/event/timer/date"); 
-//t.addReact(source:{topic:"mh/location/raum1/state/switch"},targetTopic:"mh/location/raum1/state/lamp",condition:"onEvent",trigger:"mh/event/timer/date"); 
-//t.addReact(source:{message:"on"},targetTopic:"mh/location/raum1/state/lamp",condition:"onEvent",trigger:"mh/event/timer/date"); 
+//t.addReact(source:{topic:"akm/location/gas/state/counter"},targetTopic:"mh/location/gas/state/counterlastday",condition:"onEvent",trigger:"mh/event/timer/date"); 
+//t.addReact(source:{topic:"akm/location/raum1/state/switch"},targetTopic:"mh/location/raum1/state/lamp",condition:"onEvent",trigger:"mh/event/timer/date"); 
+//t.addReact(source:{message:"on"},targetTopic:"akm/location/raum1/state/lamp",condition:"onEvent",trigger:"mh/event/timer/date"); 
