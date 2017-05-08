@@ -36,12 +36,8 @@ class M {
     start(){
         this.sunTimes = SunCalc.getTimes(new Date(),this.cfg.latitude, this.cfg.longitude);
         var date= new Date();
-        if (this.sunTimes.dawn < date){
-            this.oldDawn=false;
-        }
-        if (this.sunTimes.dusk < date){
-            this.oldDusk=false;
-        }
+        if (this.sunTimes.dawn < date){ this.oldDawn=false; }
+        if (this.sunTimes.dusk < date){ this.oldDusk=false; }
         
         // console.log(moment(this.sunTimes.sunset).format());
         console.log(this.sunTimes);
@@ -72,11 +68,11 @@ class M {
                 obj.oldMinutes=moment().minutes();
 
                 var date = new Date();
-                if (obj.sunTimes.dawn < date && obj.oldDawn){
+                if ((obj.sunTimes.dawn < date) && obj.oldDawn){
                     mqttClient.publish(obj.root + "/event/timer/dawn",moment().format());
                     obj.oldDawn=false;
                 }
-                if (obj.sunTimes.dusk < date && obj.oldDusk){
+                if ((obj.sunTimes.dusk < date) && obj.oldDusk){
                     mqttClient.publish(obj.root + "/event/timer/dusk",moment().format());
                     obj.oldDusk=false;
                 }
@@ -88,9 +84,9 @@ class M {
             if (moment().isoWeekday() !== obj.oldDay) {
                 mqttClient.publish(obj.root + "/event/timer/day",moment().isoWeekday().toString());
                 obj.oldDay=moment().isoWeekday();
-                obj.sunTimes = SunCalc.getTimes(new Date(),this.cfg.latitude, this.cfg.longitude);
-                obj.oldDawn=false;
-                obj.oldDusk=false;
+                obj.sunTimes = SunCalc.getTimes(new Date(),obj.cfg.latitude, obj.cfg.longitude);
+                obj.oldDawn=true;
+                obj.oldDusk=true;
             }
             if (moment().date() !== obj.oldDate) {
                 mqttClient.publish(obj.root + "/event/timer/date",moment().date().toString());

@@ -32,7 +32,7 @@ class V{
 const v = new V();
 
 class DF {
-    constructor(args,style,renderer,compute,formatter,prescale=10,fraction=1,unit="",icons){
+    constructor(args,style,renderer,compute,formatter,prescale=10,fraction=1,unit="",icons,label){
         this.id=null;
         this.status=0; // 0=not initialized, 1=initialized and valid, 2=initialized need redraw
         this.style=style;
@@ -42,6 +42,7 @@ class DF {
         this.fraction=fraction;
         this.unit=unit;
         this.icons=icons;
+        this.label=label;
         if (renderer instanceof Function){
             this.renderer=renderer;
         } else {
@@ -110,7 +111,7 @@ class Container {
         this.bgImage=bgImage;
     }
     addDF(args,style,unit,renderer,compute,formatter,prescale,fraction){
-        var icons;
+        var icons; var label;
         var topics=args;
         if(arguments.length<2){
             style = args.style;
@@ -122,9 +123,9 @@ class Container {
             fraction = args.fraction;
             topics = args.topics;
             icons = args.icons;
-            // console.log(icons);
+            label = args.label;
         }
-        var df = new DF(topics,style,renderer,compute,formatter,prescale,fraction,unit,icons);
+        var df = new DF(topics,style,renderer,compute,formatter,prescale,fraction,unit,icons,label);
         df.id="df"+this.id++;
         df.value=this.defVal;
         this.container.add(df);
@@ -145,18 +146,13 @@ class Container {
         c.render();
     }
     updateValue(topicvalue){
-        // var split = topicvalue.split('#', 2);
-        var topic = topicvalue.topic; // split[0];
-        var value = topicvalue.message; //split[1];
+        var topic = topicvalue.topic;
+        var value = topicvalue.message;
         console.log("Listener "+topic+" : "+value);
         _v.set(topic,value);
-        // console.log(_l.get(topic).listener);
         for (let df of _l.get(topic).listener){
-            // console.log(df.id);
-            // console.log(df.compute(df.args));
             df.value = df.compute(df.args);
             df.status=2;
-            // console.log(_l);
         }
         c.render();
     }
