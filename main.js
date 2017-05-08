@@ -1,27 +1,35 @@
 /* Node-Server Startpunkt
  * (c) 2017
- * V.2.0.0
+ * V.2.0.2
  */
 /* global __dirname */
 'use strict';
 
+// Logging
+require('./logger');
+var mainLog = require('winston').loggers.get('main');
+var httpLog = require('winston').loggers.get('http');
+var socketsLog = require('winston').loggers.get('sockets');
+var mqttLog = require('winston').loggers.get('mqtt');
+
 // Load Main Configuration
 var cfg = require('./cfg/config');
-console.log(cfg.host);
+mainLog.info(cfg.host);
 
 // Topics Logger
 const t = require('./topicsLogger');
 t.setCfg(cfg);
 require('./cfg/'+cfg.database+'/topics');
 t.list();
+t.start();
 
 // MQTT React
 const r = require('./mqttReact');
 require('./cfg/'+cfg.database+'/react');
 
-
 // Load Dynamic Pages Structure
-var menu = require('./cfg/'+cfg.database+'/menu');
+var menu    = require('./cfg/'+cfg.database+'/menu');
+var diagram = require('./cfg/'+cfg.database+'/diagram');
 
 // Express Webserver and Socket.io
 const express = require('express');
@@ -32,47 +40,15 @@ const app = express();
 app.use(express.static(__dirname + '/pub'));
 app.use(express.static(__dirname + '/pub/' + cfg.database));
 app.set('view engine', 'ejs');
-const server = app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+const server = app.listen(PORT, () => httpLog.info(`Listening on ${ PORT }`));
 const io = socketIO(server);
 
 app.get('/', (req, res) => {
-    console.log("REQ:" + req.query.view);
+    httpLog.info("REQ:" + req.query.view);
     var page = req.query.view;
     if (page === undefined || menu[page] === undefined) page='default';
-    res.render('pages/index',{active:page, menu : menu });
+    res.render('pages/index',{active:page, menu:menu, diagram:diagram });
 });
-
-// mySQL Client
-var mysql = require('mysql');
-var mysqlClient = mysql.createConnection({
-  host     : cfg.host,
-  user     : cfg.mysqlUser,
-  password : cfg.mysqlPassword
-});
-mysqlClient.connect();
-t.setMysqlClient(mysqlClient);
-t.start();
-
-mysqlClient.query('CREATE DATABASE IF NOT EXISTS ' + cfg.database +';', (error) => {
-    if (error) throw error;
-}); 
-
-mysqlClient.query("CREATE TABLE IF NOT EXISTS " + cfg.database + "." + cfg.database +" ("
-                    + " id BIGINT AUTO_INCREMENT PRIMARY KEY,"
-                    + " topic VARCHAR(255), message VARCHAR(255),"
-                    + " ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
-                    + ");", (error) => {
-    if (error) throw error;
-}); 
-
-/*
-    var _ = require('underscore');
-    mysqlClient.query('SELECT * FROM mqtt LIMIT 1', function (error, results) {
-    if (error) throw error;
-    _.each(results, (row) => showRow(row));
-   
-}); */
-
 
 // MQTT Client
 const mqtt = require('mqtt');
@@ -80,37 +56,40 @@ const mqttClient  = mqtt.connect('mqtt://' + cfg.host);
 
 mqttClient.on('connect', () => {
     mqttClient.subscribe(cfg.database + '/#');
-    console.log("MQTT connected");
+    mqttLog.info("MQTT connected");
 });
  
 mqttClient.on('message', (topic, message, pg) => {
-    //console.log("Received from MQTT: " + topic.toString() + " value: " + message.toString());
+    mqttLog.debug("Received from MQTT: " + topic.toString() + " value: " + message.toString());
     var post  = {message: message.toString(), topic: topic.toString()};
-    /* mysqlClient.query('INSERT INTO '+ cfg.database +'.' + cfg.database + ' SET ?', post, (error) =>{
-        if (error) throw error;
-    });*/
     t.trigger(topic,message);
     io.emit(topic,post);
 });
 
 io.on('connection', (socket) => {
-    console.log('Client connected');
+    socketsLog.info('Client connected');
     socket.on('poll', (data) => {
-        console.log('Client ask for ' + data.toString() + ' on ' + socket.id);
-        var query = mysqlClient.query('SELECT message FROM '+ cfg.database +'.' + cfg.database + ' WHERE topic = ? ORDER BY id DESC LIMIT 1', data.toString());
-        query.on('error', (error) => {
-            throw error;
-        });
+        socketsLog.debug('Client ask for ' + data.toString() + ' on ' + socket.id);
+        var query = t.query(data);
         query.on('result', (result) => {
-            console.log("Send to client " + data.toString() + " value: " + result.message);
+            socketsLog.debug("Send to client " + data.toString() + " value: " + result.message);
             socket.emit(data.toString(),{topic:data.toString(),message:result.message});
         });
     });
+    socket.on('chart', (data) => {
+        socketsLog.debug('CHART: Client ask for ' + data.topics.toString() + ' with ' + data.interval.toString() + ' on ' + socket.id);
+        var query = t.queryChart(data);
+        query.on('result', (result) => {
+            socketsLog.debug("Send to client " + data.toString() + " value: " + result.message);
+            socket.emit('chartdata',{data:"123"});
+        });
+
+    });
     socket.on('set', (data) => {
         mqttClient.publish(data.topic,data.message);
-        console.log('Client sent ' + data.topic + ' with value: ' + data.message + ' on ' + socket.id);
+        mqttLog.debug('Client sent ' + data.topic + ' with value: ' + data.message + ' on ' + socket.id);
     });    
-    socket.on('disconnect', () => console.log('Client disconnected'));
+    socket.on('disconnect', () => socketsLog.info('Client disconnected'));
 });
 
 // MQTT Timer

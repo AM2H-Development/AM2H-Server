@@ -3,6 +3,7 @@
  */
 var moment = require('moment');
 
+var tLog = require('winston').loggers.get('topicsLogger');
 const _m = new Map(); // Logger (topic,LogContainer)
 const _t = new Map(); // Triggers (topic, timestamp)
 const _c = new Map(); // Cleanups (topic, CleanupContainer)
@@ -46,13 +47,36 @@ class T {
     }
     setCfg(cfg){
         this.cfg=cfg;
+        // mySQL Client
+        var mysql = require('mysql');
+        var mysqlClient = mysql.createConnection({
+          host     : cfg.host,
+          user     : cfg.mysqlUser,
+          password : cfg.mysqlPassword
+        });
+        mysqlClient.connect();
+        this.mysqlClient=mysqlClient;
+        
+        mysqlClient.query('CREATE DATABASE IF NOT EXISTS ' + cfg.database +';', (error) => {
+            if (error) tLog.error("Error: connect ETIMEDOUT at CREATE DATABASE");
+        }); 
+
+        mysqlClient.query("CREATE TABLE IF NOT EXISTS " + cfg.database + "." + cfg.database +" ("
+                            + " id BIGINT AUTO_INCREMENT PRIMARY KEY,"
+                            + " topic VARCHAR(255), message VARCHAR(255),"
+                            + " ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+                            + ");", (error) => {
+            if (error) tLog.error("Error: connect ETIMEDOUT at CREATE TABLE");
+        }); 
+
+        return this;
     }
     addCleanup(options){
         if (!options.topic){
             if (!this.lastTopic) throw "Error, no last topic available";
             options.topic=this.lastTopic;
         }
-        console.log("cleaning " + options.topic + " with option " + options.lifespan + " " + options.unit);
+        tLog.info("cleaning " + options.topic + " with option " + options.lifespan + " " + options.unit);
         _c.set(options.topic,new CleanupContainer(options));
         return this;
     }
@@ -60,7 +84,7 @@ class T {
         if (!this["log_"+options.condition]){
             throw "Error adding " + options.topic + " with option " + options.condition;
         }
-        console.log("adding " + options.topic + " with option " + options.condition + " " + options.interval  + " s | newonly=" + options.newonly);
+        tLog.info("adding " + options.topic + " with option " + options.condition + " " + options.interval  + " s | newonly=" + options.newonly);
         _m.set(options.topic,new LogContainer(options));
         this.lastTopic=options.topic;
         return this;
@@ -85,7 +109,7 @@ class T {
     cleanup(obj){
         for (var item of _c){
             var timestamp = moment().subtract(item[1].lifespan, item[1].unit).format("YYYY-MM-DD HH:mm:ss.S");
-            console.log(moment().format("YYYY-MM-DD HH:mm:ss.S") + " cleaning " + item[0] + " to " + timestamp);
+            tLog.info(moment().format("YYYY-MM-DD HH:mm:ss.S") + " cleaning " + item[0] + " to " + timestamp);
             obj.cleanupMysql(item[0],timestamp);
         }        
     }
@@ -104,7 +128,7 @@ class T {
         var date = Date.now();
         if (item[1].last + (item[1].interval*1000) < date){
            if(!item[1].newonly || (item[1].newonly && (item[1].loggedMessage.toString() !== item[1].message.toString()))){
-                console.log("logger::::every " + item[0] + " " + item[1].message);
+                tLog.debug("every " + item[0] + " " + item[1].message);
                 this.logToMysql(item[0],item[1].message);
                 item[1].loggedMessage=item[1].message;
             }
@@ -118,7 +142,7 @@ class T {
         var date = Date.now();
         if (item[1].last + (item[1].interval*1000) < date && item[1].newMessage){
             if(!item[1].newonly || (item[1].newonly && (item[1].loggedMessage.toString() !== item[1].message.toString()))){
-                console.log("logger::::atMost " + item[0] + " " + item[1].message);
+                tLog.debug("atMost " + item[0] + " " + item[1].message);
                 this.logToMysql(item[0],item[1].message);
                 item[1].loggedMessage=item[1].message;
             }
@@ -134,7 +158,7 @@ class T {
         var date = Date.now();
         if (item[1].last + (item[1].interval*1000) < date || item[1].newMessage){
             if(!item[1].newonly || (item[1].newonly && (item[1].loggedMessage.toString() !== item[1].message.toString()))){
-                console.log("logger::::atLeast " + item[0] + " " + item[1].message);
+                tLog.debug("atLeast " + item[0] + " " + item[1].message);
                 this.logToMysql(item[0],item[1].message);
                 item[1].loggedMessage=item[1].message;
             }
@@ -148,7 +172,7 @@ class T {
         if (!item[1].message || !item[1].newMessage) return false;
         if (!item[1].newonly || (item[1].newonly && (item[1].loggedMessage.toString() !== item[1].message.toString()))){
             if(!item[1].newonly || (item[1].newonly && (item[1].loggedMessage.toString() !== item[1].message.toString()))){
-                console.log("logger::::all " + item[0] + " " + item[1].message);
+                tLog.debug("all " + item[0] + " " + item[1].message);
                 this.logToMysql(item[0],item[1].message);
                 item[1].loggedMessage=item[1].message;
             }
@@ -164,7 +188,7 @@ class T {
         if (_t.get(item[1].trigger)>item[1].last){
             item[1].last=Date.now();
             if(!item[1].newonly || (item[1].newonly && (item[1].loggedMessage.toString() !== item[1].message.toString()))){
-                console.log("logger::::onEvent " + item[0] + " " + item[1].message);
+                tLog.debug("onEvent " + item[0] + " " + item[1].message);
                 this.logToMysql(item[0],item[1].message);
                 item[1].loggedMessage=item[1].message;
             }
@@ -184,15 +208,50 @@ class T {
             if (error) throw error;
         });
     }
+    query(data){
+        var query = this.mysqlClient.query('SELECT message FROM '+ this.cfg.database +'.' + this.cfg.database + ' WHERE topic = ? ORDER BY id DESC LIMIT 1', data.toString());
+
+        query.on('error', (error) => {
+            throw error;
+        });
+        
+        return query;
+    }
+    queryChart(data){
+        // todo
+        var query = this.mysqlClient.query('SELECT message FROM '+ this.cfg.database +'.' + this.cfg.database + ' WHERE topic = ? ORDER BY id DESC LIMIT 1', data.toString());
+
+        query.on('error', (error) => {
+            throw error;
+        });
+        
+        return query;
+    }
     stop(){
         clearInterval(this.logTimer);
         clearInterval(this.cleanupTimer);
     }
     list(){
         for (var topic of _m){
-            console.log(topic);
+            tLog.info(topic);
         }        
     }
 }
 var t = new T();
 module.exports=t;
+
+
+
+
+/*
+    var _ = require('underscore');
+    mysqlClient.query('SELECT * FROM mqtt LIMIT 1', function (error, results) {
+    if (error) throw error;
+    _.each(results, (row) => showRow(row));
+   
+}); */
+
+
+
+
+
