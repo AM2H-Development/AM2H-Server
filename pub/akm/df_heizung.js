@@ -18,13 +18,70 @@ function initFields(){
         "background-size": "1030px 620px"
             });
     c.setDefaultValue("wait..");
+    c.addDF({   topics: ["akm/d01/state/temp01"],
+                style: "width: 56px; left: 54px; top: 325px;",
+                unit: " °C",
+                renderer: re.clickable,
+                prescale: 10,
+                fraction: 1
+            });
+            
+    c.addDF({   topics: ["akm/d01/state/temp02"],
+                style: "width: 56px; left: 452px; top: 332px;",
+                unit: " °C",
+                renderer: re.clickable,
+                prescale: 10,
+                fraction: 1
+            });
+            
+    c.addDF({   topics: ["akm/d01/state/temp03"],
+                style: "width: 56px; left: 452px; top: 399px;",
+                unit: " °C",
+                renderer: re.clickable,
+                prescale: 10,
+                fraction: 1
+            }); 
+            
+    c.addDF({   topics: ["akm/d01/state/temp04"],
+                style: "width: 56px; left: 632px; top: 388px;",
+                unit: " °C",
+                renderer: re.clickable,
+                prescale: 10,
+                fraction: 1
+            });         
+            
+    c.addDF({   topics: ["akm/d01/state/temp05"],
+                style: "width: 48px; left: 310px; top: 456px;",
+                unit: " °C",
+                renderer: re.clickable,
+                prescale: 10,
+                fraction: 1
+            });
+            
+        c.addDF({   topics: ["akm/d01/state/power01"],
+                style: "width: 56px; left: 632px; top: 332px;",
+                unit: " %",
+                renderer: re.clickable,
+                prescale: 10,
+                fraction: 1
+            });        
+            
+        c.addDF({   topics: ["akm/d01/state/power02"],
+                style: "width: 56px; left: 632px; top: 363px;",
+                unit: " %",
+                renderer: re.clickable,
+                prescale: 10,
+                fraction: 1
+            });                
+    
     c.addDF({   topics: ["akm/m01/state/power01"],
-                style: "width: 56px; left: 325px; top: 332px;",
+                style: "width: 56px; left: 326px; top: 332px;",
                 unit: " kW",
                 renderer: re.clickable,
                 prescale: 100,
                 fraction: 1
             });
+        
     c.addDF({   topics: ["akm/m01/state/counter01"],
                 style: "width: 78px; left:  203px; top: 362px;",
                 unit: " m³/d",

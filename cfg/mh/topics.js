@@ -19,16 +19,6 @@
 
 const t = require('../../topicsLogger');
 
-t.addLogger({topic:"mh/event/timer/seconds",condition:"every",interval:5})
-        .addCleanup({unit:"seconds",lifespan:30});
-
-t.addLogger({topic:"mh/event/timer/minutes",condition:"atLeast",interval:18})
-        .addCleanup({unit:"seconds",lifespan:30});
-
-t.addLogger({topic:"mh/location/raum1/state/temperature",condition:"all",newonly:true})
-        .addCleanup({unit:"hours",lifespan:30});
-
-t.addLogger({topic:"mh/location/raum1/state/switch",condition:"atMost",interval:5});
 
 t.addLogger({topic:"mh/location/raum1/state/humidity",condition:"onEvent",trigger:"mh/location/raum1/state/switch"});
 t.addCleanup({topic:"mh/event/timer/seconds",unit:"seconds",lifespan:30});
