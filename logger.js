@@ -12,7 +12,7 @@ winston.loggers.add('main', {
     },
     file: {
         level:DEBUGLEVEL,
-        filename: './logs/main.log'
+        filename: './wlogs/main.log'
     }
   });
 
@@ -24,7 +24,7 @@ winston.loggers.add('http', {
     },
     file: {
         level:DEBUGLEVEL,
-        filename: './logs/http.log'
+        filename: './wlogs/http.log'
     }
   });
 
@@ -36,7 +36,7 @@ winston.loggers.add('sockets', {
     },
     file: {
         level:DEBUGLEVEL,
-        filename: './logs/sockets.log'
+        filename: './wlogs/sockets.log'
     }
   });
 
@@ -48,7 +48,7 @@ winston.loggers.add('mqtt', {
     },
     file: {
         level:PRODUCTION,
-        filename: './logs/mqtt.log'
+        filename: './wlogs/mqtt.log'
     }
   });
 
@@ -60,7 +60,7 @@ winston.loggers.add('timer', {
     },
     file: {
         level:DEBUGLEVEL,
-        filename: './logs/timer.log'
+        filename: './wlogs/timer.log'
     }
   });
 
@@ -72,6 +72,6 @@ winston.loggers.add('topicsLogger', {
     },
     file: {
         level:DEBUGLEVEL,
-        filename: './logs/tlog.log'
+        filename: './wlogs/tlog.log'
     }
   });
