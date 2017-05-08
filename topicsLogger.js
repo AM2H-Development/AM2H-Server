@@ -17,9 +17,9 @@ class LogContainer{
         this.newMessage=false;
         this.last= 0;
         this.newonly   =options.newonly ? options.newonly: false;
-        this.condition =options.condition === undefined ? "none" : options.condition;
-        this.interval  =options.interval  === undefined ? 0 : options.interval;
-        this.trigger   =options.trigger  === undefined ? "" : options.trigger;
+        this.condition =options.condition ? options.condition : "none";
+        this.interval  =options.interval ? options.interval : 0;
+        this.trigger   =options.trigger ? options.trigger : "";
     }
 };
 
