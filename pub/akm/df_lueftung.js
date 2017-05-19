@@ -99,19 +99,5 @@ function initFields(){
                 renderer: re.input,
                 prescale: 10,
                 fraction: 1
-            });
-    c.addDF({   topics: ["akm/d05/state/temp01"],
-                style: "width: 56px; left: 257px; top: 439px;",
-                unit: " °C",
-                renderer: re.clickable,
-                prescale: 10,
-                fraction: 1
-            }); 
-    c.addDF({   topics: ["akm/d05/state/temp01"],
-                style: "width: 56px; left: 491px; top: 439px;",
-                unit: " °C",
-                renderer: re.clickable,
-                prescale: 10,
-                fraction: 1
-            });             
+            });      
 }

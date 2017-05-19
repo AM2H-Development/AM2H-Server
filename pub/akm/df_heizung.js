@@ -62,7 +62,7 @@ function initFields(){
                 style: "width: 56px; left: 632px; top: 332px;",
                 unit: " %",
                 renderer: re.clickable,
-                prescale: 10,
+                prescale: 2,
                 fraction: 1
             });        
             
@@ -70,9 +70,33 @@ function initFields(){
                 style: "width: 56px; left: 632px; top: 363px;",
                 unit: " %",
                 renderer: re.clickable,
-                prescale: 10,
+                prescale: 1,
                 fraction: 1
-            });                
+            });  
+
+        c.addDF({   topics: ["akm/d01/state/state01"],
+                style: "width: 26px; left: 632px; top: 420px;",
+                unit: "",
+                renderer: re.clickable,
+                prescale: 1,
+                fraction: 0
+            });  
+            
+    c.addDF({   topics: ["akm/d01/state/counter01"],
+                style: "width: 56px; left: 632px; top: 307px;",
+                unit: "",
+                renderer: re.none,
+                prescale: 1,
+                fraction: 0
+            });              
+            
+    c.addDF({   topics: ["akm/d01/state/counter02"],
+                style: "width: 26px; left:  220px; top: 250px;",
+                unit: "",
+                renderer: re.none,
+                prescale: 1,
+                fraction: 0
+            });  
     
     c.addDF({   topics: ["akm/m01/state/power01"],
                 style: "width: 56px; left: 326px; top: 332px;",
@@ -117,6 +141,5 @@ function initFields(){
                 compute: cp1,
                 prescale: 10,
                 fraction: 1
-            });    
-           
+            });
 }
