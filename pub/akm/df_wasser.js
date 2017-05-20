@@ -3,6 +3,11 @@
  */
 /* global c, v, socket, bgImage, re, fo, cp */
 
+var cp1 = function(a){
+  if (v.asI(a[1]==1)) return "-";    
+    return v.asI(a[0]);
+};
+
 function initFields(){
     c.setContext("#contentlayer");
     c.setBgImage({
@@ -20,7 +25,7 @@ function initFields(){
                 fraction: 1
             });
     c.addDF({   topics: ["akm/d01/state/temp05"],
-                style: "width: 48px; left: 633px; top: 440px;",
+                style: "width: 48px; left: 633px; top: 459px;",
                 unit: " °C",
                 renderer: re.clickable,
                 prescale: 10,
@@ -33,4 +38,27 @@ function initFields(){
                 prescale: 1,
                 fraction: 0
             });
+    c.addDF({   topics: ["akm/d01/state/state02"],
+                style: "width: 26px; left: 497px; top: 392px;",
+                unit: "",
+                renderer: re.clickable,
+                prescale: 1,
+                fraction: 0
+            });
+    c.addDF({   topics: ["akm/d01/state/temp03","akm/d01/state/state01"],
+                style: "width: 56px; left: 765px; top: 460px;",
+                unit: " °C",
+                compute: cp1,            
+                prescale: 10,
+                fraction: 1
+            });
+    c.addDF({   topics: ["akm/d01/state/temp04","akm/d01/state/state01"],
+                style: "width: 56px; left: 765px; top: 551px;",
+                unit: " °C",
+                //compute: cp1,            
+                //formatter: fp1,
+                renderer: re.clickable,                
+                prescale: 10,
+                fraction: 1
+            });            
 }    

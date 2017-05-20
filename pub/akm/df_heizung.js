@@ -5,7 +5,6 @@
 
 var cp1 = function(a){
     var val = v.asF(a[0])-v.asF(a[1]);
-    // if (val + v.asF(a[1])>0) val *=-1; 
     return val;
 };
 
@@ -58,15 +57,15 @@ function initFields(){
                 fraction: 1
             });
             
-        c.addDF({   topics: ["akm/d01/state/power01"],
-                style: "width: 56px; left: 632px; top: 332px;",
+    c.addDF({   topics: ["akm/d01/state/power01"],
+               style: "width: 56px; left: 632px; top: 332px;",
                 unit: " %",
                 renderer: re.clickable,
                 prescale: 2,
                 fraction: 1
             });        
             
-        c.addDF({   topics: ["akm/d01/state/power02"],
+    c.addDF({   topics: ["akm/d01/state/power02"],
                 style: "width: 56px; left: 632px; top: 363px;",
                 unit: " %",
                 renderer: re.clickable,
@@ -74,13 +73,13 @@ function initFields(){
                 fraction: 1
             });  
 
-        c.addDF({   topics: ["akm/d01/state/state01"],
-                style: "width: 26px; left: 632px; top: 420px;",
+    c.addDF({   topics: ["akm/d01/state/state01"],
+                style: "width: 20px; left: 573px; top: 407px;",
                 unit: "",
-                renderer: re.clickable,
-                prescale: 1,
-                fraction: 0
-            });  
+                renderer: re.image,
+                icons: ["/icons/Ventil_(Outline)_icon.svg","/icons/Ventil_(Heizen)_icon.svg","Ventil_(Befuellen)_icon","/icons/Ventil_(Wasser)_icon.svg"],                
+                formatter: fo.none
+    });  
             
     c.addDF({   topics: ["akm/d01/state/counter01"],
                 style: "width: 56px; left: 632px; top: 307px;",

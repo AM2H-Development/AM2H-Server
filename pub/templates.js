@@ -33,6 +33,14 @@ re.toggleImage = function(id,val,style){
     return "<div style=\"position: absolute;"+style+"\" id=\""+id+"\">" + icon + "</div>";
 };
 
+re.image = function(id,val,style){
+    var o= _o.get(id);
+    var iconUrl = o.icons[val] !== undefined ? o.icons[val] : o.icons[0];
+    //var onclick = "c.send({topic:'"+o.args[0]+"', message:'"+val+"'});";
+    var icon = "<img src=\"" + iconUrl + "\" onclick=\""+ onclick +"\">";
+    return "<div style=\"position: absolute;"+style+"\" id=\""+id+"\">" + icon + "</div>";
+};
+
 /* Computes */
 cp.add = function(a){
     var res=0;

@@ -5,9 +5,9 @@
 
 var re1 = function(id,val,style){
     if (parseInt(val)<0){
-        style +="background-color: lightgreen;"
+        style +="background-color: lightgreen;";
     } else {
-        style +="background-color: lightyellow;"
+        style +="background-color: lightyellow;";
            }
     return "<div class=\"df\" id=\""+id+"\" style=\""+style+"\">"+val+"</div>";
 };
@@ -31,42 +31,42 @@ function initFields(){
                 style: "width: 78px; left:  204px; top: 355px;",
                 unit: " W",
                 renderer: re1,
-                prescale: 100,
+                prescale: 10,
                 fraction: 1
             });
     c.addDF({   topics: ["akm/m02/state/counter01"],
                 style: "width: 88px; left:  194px; top: 388px;",
                 unit: " kWh",
                 renderer: re.clickable,
-                prescale: 100,
-                fraction: 1
+                prescale: 10000,
+                fraction: 2
             });    
     c.addDF({   topics: ["akm/m02/state/counter02"],
                 style: "width: 88px; left:  194px; top: 412px;",
                 unit: " kWh",
                 renderer: re.clickable,
-                prescale: 100,
+                prescale: 10000,
                 fraction: 1
             });      
     c.addDF({   topics: ["akm/m03/state/power01"],
                 style: "width: 78px; left:  418px; top: 355px;",
                 unit: " W",
                 renderer: re1,
-                prescale: 100,
+                prescale: 10,
                 fraction: 1
             });          
     c.addDF({   topics: ["akm/m03/state/counter01"],
                 style: "width: 88px; left:  408px; top: 388px;",
                 unit: " kWh",
                 renderer: re.clickable,
-                prescale: 100,
-                fraction: 1
+                prescale: 10000,
+                fraction: 2
             });
     c.addDF({   topics: ["akm/m03/state/counter02"],
                 style: "width: 88px; left:  408px; top: 412px;",
                 unit: " kWh",
                 renderer: re.clickable,
-                prescale: 100,
+                prescale: 10000,
                 fraction: 1
             });  
     c.addDF({   topics: ["akm/m02/state/power01","akm/m03/state/power01"],
@@ -74,7 +74,7 @@ function initFields(){
                 unit: " W",
                 renderer: re.clickable,
                 compute: cp1,
-                prescale: 100,
+                prescale: 10,
                 fraction: 1
             });    
     
