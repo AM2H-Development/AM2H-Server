@@ -51,12 +51,18 @@ t.addLogger({topic:"akm/d05/state/temp01",condition:"every",interval:15}).addCle
 t.addLogger({topic:"akm/d05/state/hum01",condition:"every",interval:15}).addCleanup({unit:"years",lifespan:10});
 t.addLogger({topic:"akm/d05/state/mode01",condition:"every",interval:15,newonly:true}).addCleanup({unit:"years",lifespan:10});
 t.addLogger({topic:"akm/d05/state/mode02",condition:"every",interval:15,newonly:true}).addCleanup({unit:"years",lifespan:10});
+t.addLogger({topic:"akm/location/buero/state/temp01",condition:"every",interval:15,newonly:true}).addCleanup({unit:"years",lifespan:10});
+t.addLogger({topic:"akm/location/buero/state/hum01",condition:"every",interval:15,newonly:true}).addCleanup({unit:"years",lifespan:10});
 
 // Strom
 
 t.addLogger({topic:"akm/m02/state/power01",condition:"every",interval:15}).addCleanup({unit:"years",lifespan:10});
 t.addLogger({topic:"akm/m02/state/counter01",condition:"every",interval:15,newonly:true}).addCleanup({unit:"years",lifespan:10});
 t.addLogger({topic:"akm/m02/state/counter02",condition:"every",interval:15,neonly:true}).addCleanup({unit:"years",lifespan:10});
+t.addLogger({topic:"akm/m02/state/counterLastDay01",condition:"all",newonly:true}).addCleanup({unit:"years",lifespan:10});
+t.addLogger({topic:"akm/m02/state/counterLastDay02",condition:"all",neonly:true}).addCleanup({unit:"years",lifespan:10});
+t.addLogger({topic:"akm/m03/state/counterLastDay01",condition:"all",newonly:true}).addCleanup({unit:"years",lifespan:10});
+t.addLogger({topic:"akm/m03/state/counterLastDay02",condition:"all",neonly:true}).addCleanup({unit:"years",lifespan:10});
 t.addLogger({topic:"akm/m03/state/power01",condition:"every",interval:15}).addCleanup({unit:"years",lifespan:10});
 t.addLogger({topic:"akm/m03/state/counter01",condition:"every",interval:15,newonly:true}).addCleanup({unit:"years",lifespan:10});
 t.addLogger({topic:"akm/m03/state/counter02",condition:"every",interval:15,neonly:true}).addCleanup({unit:"years",lifespan:10});

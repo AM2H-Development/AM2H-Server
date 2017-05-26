@@ -66,14 +66,14 @@ function initFields(){
                 fraction: 1
             });    
     c.addDF({   topics: ["akm/d05/state/temp01"],
-                style: "width: 56px; left: 54px; top: 318px;",
+                style: "width: 56px; left: 54px; top: 325px;",
                 unit: " °C",
                 renderer: re.clickable,
                 prescale: 10,
                 fraction: 1
             });    
     c.addDF({   topics: ["akm/d05/state/hum01"],
-                style: "width: 56px; left: 54px; top: 342px;",
+                style: "width: 56px; left: 54px; top: 349px;",
                 unit: " %",
                 renderer: re.clickable,
                 prescale: 10,
@@ -99,5 +99,19 @@ function initFields(){
                 renderer: re.input,
                 prescale: 10,
                 fraction: 1
-            });      
+            });  
+    c.addDF({   topics: ["akm/location/buero/state/temp01"],
+                style: "width: 56px; left: 784px; top: 495px;",
+                unit: " °C",
+                renderer: re.clickable,
+                prescale: 10,
+                fraction: 1
+            }); 
+    c.addDF({   topics: ["akm/location/buero/state/hum01"],
+                style: "width: 56px; left: 784px; top: 524px;",
+                unit: " %",
+                renderer: re.clickable,
+                prescale: 10,
+                fraction: 1
+            });                 
 }

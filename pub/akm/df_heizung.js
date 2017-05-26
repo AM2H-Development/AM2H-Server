@@ -50,7 +50,7 @@ function initFields(){
             });         
             
     c.addDF({   topics: ["akm/d01/state/temp05"],
-                style: "width: 48px; left: 310px; top: 456px;",
+                style: "width: 48px; left: 310px; top: 459px;",
                 unit: " °C",
                 renderer: re.clickable,
                 prescale: 10,

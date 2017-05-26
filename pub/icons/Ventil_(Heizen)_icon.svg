@@ -18,7 +18,7 @@
 </g>
 <g id="XMLID_4_">
 	<g>
-		<polygon fill="#FEF9D1" points="14.25,14.25 0.5,21.75 0.5,6.75 		"/>
+		<polygon fill="#C7CAE3" points="14.25,14.25 0.5,21.75 0.5,6.75 		"/>
 	</g>
 	<g>
 		<line fill="none" stroke="#000000" stroke-linecap="round" x1="0.5" y1="21.75" x2="0.5" y2="6.75"/>
@@ -28,7 +28,7 @@
 </g>
 <g id="XMLID_2_">
 	<g>
-		<polygon fill="#C6C9E3" points="14.25,14.25 21.75,28 6.75,28 		"/>
+		<polygon fill="#FDF9D3" points="14.25,14.25 21.75,28 6.75,28 		"/>
 	</g>
 	<g>
 		<line fill="none" stroke="#000000" stroke-linecap="round" x1="21.75" y1="28" x2="6.75" y2="28"/>
